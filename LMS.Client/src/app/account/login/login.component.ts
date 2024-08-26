@@ -4,15 +4,21 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../services/auth.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatInputModule,MatCardModule,MatIconModule,ReactiveFormsModule,MatButtonModule],
+  imports: [MatInputModule,MatCardModule,MatSnackBarModule,MatIconModule,ReactiveFormsModule,MatButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
+  authService = inject(AuthService);
+  matSnackBar = inject(MatSnackBar);
+  router = inject(Router);
 
   hide = true;  // This is used to toggle password visibility
   loginForm!: FormGroup;
@@ -38,7 +44,21 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.valid) {
       console.log('Form Submitted', this.loginForm.value);
-      // Handle login logic here
+      this.authService.login(this.loginForm.value).subscribe({
+        next:(response)=>{
+          this.matSnackBar.open(response.message!,'Close',{
+            duration:5000,
+            horizontalPosition:'center'
+          });
+          this.router.navigate(['/'])
+        },
+        error:(error)=>{
+          this.matSnackBar.open(error.error.message,'Close',{
+            duration:5000,
+            horizontalPosition:'center'
+          });
+        }
+      })
     }
   }
 }
