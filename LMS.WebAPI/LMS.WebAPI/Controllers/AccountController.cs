@@ -104,7 +104,7 @@ namespace LMS.WebAPI.Controllers
                 return Ok(new AuthResponseDto
                 {
                     IsSuccess = true,
-                    Message = "Login Succes.",
+                    Message = "Login Success.",
                     Token = token
                 });
             }
