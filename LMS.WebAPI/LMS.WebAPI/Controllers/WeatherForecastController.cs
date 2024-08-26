@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.WebAPI.Controllers
@@ -18,6 +19,7 @@ namespace LMS.WebAPI.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
@@ -28,6 +30,12 @@ namespace LMS.WebAPI.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("testauth")]
+        public IActionResult TestAuth()
+        {
+            return Ok("Authorization successful");
         }
     }
 }
