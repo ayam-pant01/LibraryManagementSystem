@@ -1,0 +1,11 @@
+<mat-card class="border-solid w-fit" >
+    <mat-card-content>
+        <h2>Welcome!</h2>
+       <span class="align-middle">{{panelName}} portal</span> 
+    </mat-card-content>
+</mat-card>
+<mat-nav-list>
+    @for (item of navItems;track navItems){
+        <a mat-list-item routerLink="/{{item.link}}" routerLinkActive="active-link">{{item.value}}</a>
+    }
+</mat-nav-list>

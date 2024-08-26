@@ -1,12 +1,9 @@
-<div>
-  <mat-toolbar>
-    <div class="flex items-center">
-      <button mat-icon-button>
+<mat-toolbar color="primary">
+      <button mat-icon-button (click)="toggleSidenav()">
         <mat-icon>menu</mat-icon>
       </button>
       <a routerLink="/">LMS</a>
-    </div>
-    <div class="flex-grow"></div>
+      <span class="spacer"></span>
     <ng-container *ngIf="isLoggedIn(); else notLoggedIn">
       <div class="flex items-center">
         <a mat-icon-button [matMenuTriggerFor]="userMenu" class="flex items-center ml-2">
@@ -31,4 +28,3 @@
       </div>
     </ng-template>
   </mat-toolbar>
-</div>

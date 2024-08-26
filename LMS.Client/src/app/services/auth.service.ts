@@ -49,7 +49,8 @@ export class AuthService {
       email:decodedToken.email,
       firstName:decodedToken.given_name,
       lastName:decodedToken.family_name,
-      roles:decodedToken.roles || []
+      role: 'Librarian'
+      // roles:decodedToken.roles || []
     }
     return userDetail;
   }
