@@ -13,25 +13,37 @@ import { RouterLink } from '@angular/router';
 })
 export class SideNavPagesComponent {
   authService = inject(AuthService);
-  isLoggedIn = this.authService.isLoggedIn();
-  userDetail : any = this.authService.getUserDetail();
-  panelName = this.isLoggedIn ? this.userDetail.role : '';
+  panelName = '';
   navItems: NavItems[] = [];
   constructor() {
-    if(this.userDetail.role != "Librarian"){
-      this.navItems = [
-        {value:"View Books", link:'login'},
-        {value:"My collections", link:'register'},
-      ]
-    }else{
-      this.navItems = [
-        {value:"View Books", link:'register'},
-        {value:"All orders", link:'login'},
-        {value:"User List", link:'register'},
-        {value:"Return books", link:'login'},
-      ]
+  this.authService.userLoggedIn.subscribe({
+    next:(status)=>{
+      if(status){
+        let userDetail = this.authService.getUserDetail();
+        console.log("comeshere",userDetail);
+        if(userDetail != null){
+          if(userDetail.role != "Librarian"){
+            this.navItems = [
+              {value:"View Books", link:'login'},
+              {value:"My collections", link:'register'},
+            ]
+          }else{
+            this.navItems = [
+              {value:"View Books", link:'register'},
+              {value:"All orders", link:'login'},
+              {value:"User List", link:'register'},
+              {value:"Return books", link:'login'},
+            ]
+          }
+          this.panelName = userDetail.role;
+          console.log("Panel name printed", this.panelName);
+        }
+      }
     }
+  })
   }
+  
+  
 }
 
 export interface NavItems{

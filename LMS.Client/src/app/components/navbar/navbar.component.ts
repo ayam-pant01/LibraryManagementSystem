@@ -27,16 +27,27 @@ matSnackBar = inject(MatSnackBar);
 router = inject(Router);
 userName: string = 'test';
 userRole: string = 'eta';
-userDetail : any = this.authService.getUserDetail();
-isLoggedIn(){
-  return this.authService.isLoggedIn();
-}
+userDetail : any = null;
+isLoggedIn : boolean = false;
+
+constructor() {
+  this.authService.userLoggedIn.subscribe({
+    next:(status)=>{
+      if(status){
+        this.userDetail = this.authService.getUserDetail();
+      }
+      this.isLoggedIn = status;
+    }
+  })
+  }
+
 logout=()=>{
   this.authService.logout();
   this.matSnackBar.open("Logout Success",'Close',{
     duration:5000,
     horizontalPosition:'center'
   });
+  this.authService.userLoggedIn.next(false);
   this.router.navigate(['/'])
 }  
 }

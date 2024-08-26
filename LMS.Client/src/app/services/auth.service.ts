@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { LoginRequest } from '../interfaces/login-request';
-import { map, Observable, retry } from 'rxjs';
+import { map, Observable, retry, Subject } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { HttpClient } from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
@@ -12,6 +12,8 @@ import { RegisterRequest } from '../interfaces/register-request';
 })
 export class AuthService {
   apiUrl: string = environment.apiUrl;
+  userLoggedIn :Subject<boolean> = new Subject();
+
   private tokenKey  = 'token';
   constructor(private http: HttpClient) { }
   login(data: LoginRequest): Observable<AuthResponse> {
@@ -31,9 +33,6 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/account/register`, data)
     .pipe(
       map((response) => {
-        if (response && response.isSuccess) {
-          console.log("response",response);
-        }
         return response;
       })
     );
@@ -43,14 +42,12 @@ export class AuthService {
     const token = this.getToken();
     if(!token) return null;
     const decodedToken:any = jwtDecode(token);
-    console.log("decodedToekn",decodedToken);
     const userDetail={
       id:decodedToken.nameid,
       email:decodedToken.email,
       firstName:decodedToken.given_name,
       lastName:decodedToken.family_name,
-      role: 'Librarian'
-      // roles:decodedToken.roles || []
+      role: decodedToken.role
     }
     return userDetail;
   }

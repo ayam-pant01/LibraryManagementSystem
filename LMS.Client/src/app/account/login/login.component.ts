@@ -43,13 +43,13 @@ export class LoginComponent implements OnInit {
   // Method to handle form submission
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log('Form Submitted', this.loginForm.value);
       this.authService.login(this.loginForm.value).subscribe({
         next:(response)=>{
           this.matSnackBar.open(response.message!,'Close',{
             duration:5000,
             horizontalPosition:'center'
           });
+          this.authService.userLoggedIn.next(true);
           this.router.navigate(['/'])
         },
         error:(error)=>{
