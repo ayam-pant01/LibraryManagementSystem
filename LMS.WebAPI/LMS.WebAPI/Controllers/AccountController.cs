@@ -100,7 +100,8 @@ namespace LMS.WebAPI.Controllers
                     });
 
                 }
-                string token = _jwtProvider.GenerateToken(user);
+                var userRole = await _userManager.GetRolesAsync(user);
+                string token = _jwtProvider.GenerateToken(user,userRole);
                 return Ok(new AuthResponseDto
                 {
                     IsSuccess = true,
