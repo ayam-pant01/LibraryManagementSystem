@@ -4,6 +4,6 @@ namespace LMS.WebAPI.Services.Authentication
 {
     public interface IJwtProvider
     {
-        string GenerateToken(AppUser user);
+        string GenerateToken(AppUser user,IList<string>? userRoles);
     }
 }
