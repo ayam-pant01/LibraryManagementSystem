@@ -14,7 +14,6 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-  // Get all books with optional filtering, paging, and search query
   getBooks(title?: string, searchQuery?: string, pageNumber: number = 1, pageSize: number = 10): Observable<{books: Book[], pagination: PaginationMetaData}> {
     let params = new HttpParams();
     if (title) params = params.append('title', title);
@@ -26,7 +25,6 @@ export class BookService {
     .pipe(
       map((response) => { 
           const pagination = JSON.parse(response.headers.get('X-Pagination')!) as PaginationMetaData;
-          // const books = response.body?.books ?? [];
           const books = response.body ?? [];
           return { books, pagination };
       }),
@@ -34,28 +32,24 @@ export class BookService {
     );
   }
 
-  // Get book by ID
   getBookById(id: number): Observable<Book> {
     return this.http.get<Book>(`${this.bookApiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
-  // Create a new book
   createBook(book: BookForCreateAndUpdateDto): Observable<Book> {
     return this.http.post<Book>(this.bookApiUrl, book).pipe(
       catchError(this.handleError)
     );
   }
 
-  // Update an existing book
   updateBook(id: number, book: BookForCreateAndUpdateDto): Observable<void> {
     return this.http.put<void>(`${this.bookApiUrl}/${id}`, book).pipe(
       catchError(this.handleError)
     );
   }
 
-  // Delete a book by ID
   deleteBook(id: number): Observable<void> {
     return this.http.delete<void>(`${this.bookApiUrl}/${id}`).pipe(
       catchError(this.handleError)
@@ -66,6 +60,6 @@ export class BookService {
 
   private handleError(error: any) {
     const errorMessage = error.error?.message || 'Server error';
-    return throwError(() => new Error(errorMessage)); // Updated to new syntax
+    return throwError(() => new Error(errorMessage));
   }
 }

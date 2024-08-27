@@ -23,8 +23,8 @@ export class RegisterComponent {
   matSnackBar = inject(MatSnackBar);
   router = inject(Router);
 
-  hidePassword = true; // This is used to toggle password visibility
-  hideConfirmPassword = true; // This is used to toggle password visibility
+  hidePassword = true;
+  hideConfirmPassword = true;
 
   registerForm: FormGroup;
   fb = inject(FormBuilder);
@@ -32,7 +32,7 @@ export class RegisterComponent {
   constructor() {
     this.registerForm = this.fb.group({
       firstName: ['', Validators.required],
-      middleName: [''], // Optional
+      middleName: [''],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, this.passwordValidator]],

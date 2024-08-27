@@ -2,18 +2,18 @@ import { Category } from "./category";
 
 export interface Book {
     bookId: number;
-    title: string; // Max length 255
-    author: string; // Max length 255
-    description: string; // Max length 1000
-    coverImage: string; // URL
-    publisher: string; // Max length 255
+    title: string; 
+    author: string; 
+    description: string; 
+    coverImage: string; 
+    publisher: string; 
     publicationDate: Date;
-    isbn: string; // Max length 20, unique
+    isbn: string; 
     pageCount: number;
-    categoryId: number; // Foreign key
+    categoryId: number; 
     categoryName?: string; 
-    category: Category; // Associated category
-    isAvailable: boolean; // Default true
+    category: Category; 
+    isAvailable: boolean; 
     // checkouts: Checkout[]; // Collection of associated checkouts
     // reviews?: Review[]; // Uncomment if you later add reviews
   }

@@ -46,7 +46,7 @@ export class CategoryComponent implements OnInit {
     if (!this.newCategoryName) return;
 
     const newCategory: Category = {
-      categoryId: 0, // This will be set by the backend or API
+      categoryId: 0,
       name: this.newCategoryName
     };
 

@@ -21,7 +21,6 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
   displayedColumns: string[] = ['title','categoryName',  'author', 'publisher', 'publicationDate', 'pageCount', 'isAvailable', 'actions'];
   bookService = inject(BookService)
   dialog = inject(MatDialog);
-  // books: Book[] = [];
   books = new MatTableDataSource<Book>();
   pagination?: PaginationMetaData;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -51,17 +50,13 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadBooks(); // Reload the books after adding or editing
+        this.loadBooks();
       }
     });
   }
 
   editBook(book: Book): void {
     this.openAddEditBookDialog(book);
-  }
-
-  deleteBook(bookId: number): void {
-    // Implement delete logic here
   }
 
 }

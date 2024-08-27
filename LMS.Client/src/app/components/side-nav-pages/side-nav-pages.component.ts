@@ -55,9 +55,9 @@ export class SideNavPagesComponent {
 
   toggleSubItems(item: NavItems) {
     if (this.expandedItem === item) {
-      this.expandedItem = null; // Collapse if the same item is clicked again
+      this.expandedItem = null;
     } else {
-      this.expandedItem = item; // Expand the clicked item
+      this.expandedItem = item;
     }
   }
   

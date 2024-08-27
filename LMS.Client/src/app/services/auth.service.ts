@@ -21,7 +21,6 @@ export class AuthService {
     .pipe(
       map((response) => {
         if (response && response.isSuccess) {
-          // Store the token in localStorage
           localStorage.setItem(this.tokenKey, response.token || '');
         }
         return response;

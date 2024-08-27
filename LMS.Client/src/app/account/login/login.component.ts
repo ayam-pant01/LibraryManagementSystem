@@ -20,27 +20,17 @@ export class LoginComponent implements OnInit {
   toastService = inject(ToastService)
   router = inject(Router);
 
-  hide = true;  // This is used to toggle password visibility
+  hidePasspordVisiblity = true; 
   loginForm!: FormGroup;
   fb = inject(FormBuilder);
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],  // Email field with required and email format validation
-      password: ['', [Validators.required, Validators.minLength(6)]],  // Password field with required and minimum length validation
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
-  // Getter methods for form controls for easier access in the template
-  get email() {
-    return this.loginForm.get('email');
-  }
-
-  get password() {
-    return this.loginForm.get('password');
-  }
-
-  // Method to handle form submission
   onSubmit() {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
