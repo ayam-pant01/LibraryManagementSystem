@@ -77,6 +77,10 @@ namespace LMS.WebAPI.Controllers
             {
                 return NotFound(new { message = $"Book with the id {id} was not found." });
             }
+            if (bookEntity.ISBN != value.ISBN && await _bookRepository.CheckBookExistsAsync(value.ISBN))
+            {
+                return Conflict(new { message = $"A book with ISBN {value.ISBN} already exists. Cannot enter duplicate." });
+            }
             _mapper.Map(value, bookEntity);
             await _bookRepository.SaveChangesAsync();
             return NoContent();

@@ -1,7 +1,7 @@
 <mat-form-field appearance="fill">
     <mat-label>Search Books</mat-label>
-    <input matInput placeholder="Enter book title">
-    <button mat-icon-button matSuffix>
+    <input matInput [(ngModel)]="searchString" placeholder="Enter book title">
+    <button (click)="loadBooks()" mat-icon-button matSuffix>
         <mat-icon>search</mat-icon>
     </button>
 </mat-form-field>

@@ -72,7 +72,7 @@ export class AuthService {
     localStorage.removeItem(this.tokenKey);
   }
 
-  private getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
+  getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
   
 }
 

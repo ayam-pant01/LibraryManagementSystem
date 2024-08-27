@@ -1,11 +1,31 @@
-<mat-card class="border-solid w-fit" >
+<mat-card class="border-solid w-fit">
     <mat-card-content>
-        <h2>Welcome!</h2>
-       <span class="align-middle">{{panelName}} portal</span> 
+      <h2>Welcome!</h2>
+      <span class="align-middle">{{ panelName }} portal</span>
     </mat-card-content>
-</mat-card>
-<mat-nav-list>
-    @for (item of navItems;track navItems){
-        <a mat-list-item routerLink="/{{item.link}}" routerLinkActive="active-link">{{item.value}}</a>
-    }
-</mat-nav-list>
+  </mat-card>
+  
+  <mat-nav-list>
+    <ng-container *ngFor="let item of navItems">
+      <!-- Main navigation item -->
+      <a mat-list-item
+         [routerLink]="item.link"
+         routerLinkActive="active-link"
+         (click)="item.subItems ? toggleSubItems(item) : null">
+        {{ item.value }}
+        <mat-icon *ngIf="item.subItems">
+          {{ expandedItem === item ? 'expand_less' : 'expand_more' }}
+        </mat-icon>
+      </a>
+  
+      <!-- Sub-navigation menu -->
+      <mat-nav-list *ngIf="expandedItem === item">
+        <ng-container *ngFor="let subItem of item.subItems">
+          <a mat-list-item [routerLink]="subItem.link" routerLinkActive="active-link">
+            {{ subItem.value }}
+          </a>
+        </ng-container>
+      </mat-nav-list>
+    </ng-container>
+  </mat-nav-list>
+  

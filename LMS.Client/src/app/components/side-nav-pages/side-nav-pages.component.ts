@@ -3,11 +3,13 @@ import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '../../services/auth.service';
 import {MatListModule} from '@angular/material/list';
 import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-side-nav-pages',
   standalone: true,
-  imports: [MatCardModule,MatListModule,RouterLink],
+  imports: [MatCardModule,MatListModule,RouterLink,CommonModule,MatIconModule],
   templateUrl: './side-nav-pages.component.html',
   styleUrl: './side-nav-pages.component.css'
 })
@@ -15,6 +17,7 @@ export class SideNavPagesComponent {
   authService = inject(AuthService);
   panelName = '';
   navItems: NavItems[] = [];
+  expandedItem: NavItems | null = null;
   constructor() {
   this.authService.userLoggedIn.subscribe({
     next:(status)=>{
@@ -29,11 +32,18 @@ export class SideNavPagesComponent {
             ]
           }else{
             this.navItems = [
-              {value:"View Books", link:'books'},
-              {value:"All orders", link:'login'},
-              {value:"User List", link:'register'},
-              {value:"Return books", link:'login'},
-            ]
+              {
+                value: "Book Management",
+                link: '', 
+                subItems: [
+                  { value: "Manage Categories", link: 'books' },
+                  { value: "Manage Books", link: 'books' }
+                ]
+              },
+              { value: "All Orders", link: 'login' },
+              { value: "User List", link: 'register' },
+              { value: "Return Books", link: 'login' }
+            ];
           }
           this.panelName = userDetail.role;
           console.log("Panel name printed", this.panelName);
@@ -42,11 +52,20 @@ export class SideNavPagesComponent {
     }
   })
   }
+
+  toggleSubItems(item: NavItems) {
+    if (this.expandedItem === item) {
+      this.expandedItem = null; // Collapse if the same item is clicked again
+    } else {
+      this.expandedItem = item; // Expand the clicked item
+    }
+  }
   
   
 }
 
 export interface NavItems{
   value:string,
-  link:string
+  link:string,
+  subItems?: NavItems[]
 }
