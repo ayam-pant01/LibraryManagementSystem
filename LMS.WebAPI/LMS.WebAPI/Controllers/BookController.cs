@@ -4,6 +4,7 @@ using LMS.WebAPI.Entities;
 using LMS.WebAPI.Interfaces;
 using LMS.WebAPI.Models;
 using LMS.WebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -11,6 +12,7 @@ using System.Text.Json;
 
 namespace LMS.WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BookController : ControllerBase

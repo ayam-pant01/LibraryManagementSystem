@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { map,Observable } from 'rxjs';
+import { catchError, map,Observable, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Book, BookForCreateAndUpdateDto } from '../interfaces/book';
 import { PaginationMetaData } from '../interfaces/pagination-meta-data';
@@ -25,34 +25,47 @@ export class BookService {
     return this.http.get<Book[]>(this.bookApiUrl, { params, observe: 'response' })
     .pipe(
       map((response) => { 
-          console.log("response",response)
           const pagination = JSON.parse(response.headers.get('X-Pagination')!) as PaginationMetaData;
           // const books = response.body?.books ?? [];
           const books = response.body ?? [];
-          console.log("pagination",pagination)
-          console.log("books",books)
           return { books, pagination };
-      })
+      }),
+      catchError(this.handleError)
     );
   }
 
   // Get book by ID
   getBookById(id: number): Observable<Book> {
-    return this.http.get<Book>(`${this.bookApiUrl}/${id}`);
+    return this.http.get<Book>(`${this.bookApiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Create a new book
   createBook(book: BookForCreateAndUpdateDto): Observable<Book> {
-    return this.http.post<Book>(this.bookApiUrl, book);
+    return this.http.post<Book>(this.bookApiUrl, book).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Update an existing book
   updateBook(id: number, book: BookForCreateAndUpdateDto): Observable<void> {
-    return this.http.put<void>(`${this.bookApiUrl}/${id}`, book);
+    return this.http.put<void>(`${this.bookApiUrl}/${id}`, book).pipe(
+      catchError(this.handleError)
+    );
   }
 
   // Delete a book by ID
   deleteBook(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.bookApiUrl}/${id}`);
+    return this.http.delete<void>(`${this.bookApiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  
+
+  private handleError(error: any) {
+    const errorMessage = error.error?.message || 'Server error';
+    return throwError(() => new Error(errorMessage)); // Updated to new syntax
   }
 }

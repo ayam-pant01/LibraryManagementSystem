@@ -6,13 +6,13 @@ import { MatMenuItem, MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSidenav } from '@angular/material/sidenav';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [MatToolbar,MatButtonModule,MatIconModule,MatSnackBarModule,MatMenuModule,MatMenuItem,RouterLink,CommonModule],
+  imports: [MatToolbar,MatButtonModule,MatIconModule,MatMenuModule,MatMenuItem,RouterLink,CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -23,7 +23,7 @@ toggleSidenav() {
   this.sidenav.toggle();
 }
 authService = inject(AuthService);
-matSnackBar = inject(MatSnackBar);
+toastService = inject(ToastService)
 router = inject(Router);
 userName: string = 'test';
 userRole: string = 'eta';
@@ -43,10 +43,7 @@ constructor() {
 
 logout=()=>{
   this.authService.logout();
-  this.matSnackBar.open("Logout Success",'Close',{
-    duration:5000,
-    horizontalPosition:'center'
-  });
+  this.toastService.openSnackBar("Logout Success");
   this.authService.userLoggedIn.next(false);
   this.router.navigate(['/'])
 }  

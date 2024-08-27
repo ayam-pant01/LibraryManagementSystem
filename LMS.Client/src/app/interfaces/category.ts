@@ -2,7 +2,7 @@ import { Book } from "./book";
 
 export interface Category {
     categoryId: number;
-    categoryName: string;
+    name: string;
   }
 
 export interface BooksByCatergory{

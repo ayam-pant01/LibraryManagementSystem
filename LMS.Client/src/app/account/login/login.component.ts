@@ -5,19 +5,19 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../services/auth.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [MatInputModule,MatCardModule,MatSnackBarModule,MatIconModule,ReactiveFormsModule,MatButtonModule],
+  imports: [MatInputModule,MatCardModule,MatIconModule,ReactiveFormsModule,MatButtonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
   authService = inject(AuthService);
-  matSnackBar = inject(MatSnackBar);
+  toastService = inject(ToastService)
   router = inject(Router);
 
   hide = true;  // This is used to toggle password visibility
@@ -45,18 +45,12 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next:(response)=>{
-          this.matSnackBar.open(response.message!,'Close',{
-            duration:5000,
-            horizontalPosition:'center'
-          });
+          this.toastService.openSnackBar(response.message!);
           this.authService.userLoggedIn.next(true);
           this.router.navigate(['/'])
         },
         error:(error)=>{
-          this.matSnackBar.open(error.error.message,'Close',{
-            duration:5000,
-            horizontalPosition:'center'
-          });
+          this.toastService.openSnackBar(error.error.message);
         }
       })
     }
