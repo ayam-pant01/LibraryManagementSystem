@@ -1,32 +1,41 @@
-<mat-card>
+
+<div class="container mx-auto px-4">
+  <mat-card>
     <mat-card-header>
       <mat-card-title>Category Management</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <!-- Add Category Form -->
-      <form (ngSubmit)="addCategory()" #categoryForm="ngForm">
+      <div class="flex flex-col space-y-4">
+      <div class="flex">
         <mat-form-field appearance="fill">
-          <mat-label>Category Name</mat-label>
+          <mat-label>New Category Name</mat-label>
           <input matInput [(ngModel)]="newCategoryName" name="categoryName" required>
         </mat-form-field>
-        <button mat-raised-button color="primary" type="submit">Add Category</button>
-      </form>
-  
-      <!-- List Categories -->
+        <button mat-raised-button color="primary" type="submit" (click)="addCategory()">Add Category</button>
+      </div>
       <mat-list>
         <mat-list-item class="m-10" *ngFor="let category of categories">
-          <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Category Name</mat-label>
-            <input matInput [(ngModel)]="category.name" (ngModelChange)="onCategoryNameChange(category.categoryId, $event)" name="categoryName{{category.categoryId}}">
-          </mat-form-field>
-          <button mat-icon-button (click)="editCategory(category.categoryId)">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <!-- <button mat-icon-button (click)="deleteCategory(category.categoryId)">
-            <mat-icon>delete</mat-icon>
-          </button> -->
+          <div class="flex justify-between">
+            <mat-form-field *ngIf="category.isEditing">
+              <mat-label>Category Name</mat-label>
+              <input matInput [(ngModel)]="category.name" name="categoryName{{category.categoryId}}">
+            </mat-form-field>
+            <span matLine *ngIf="!category.isEditing" [ngClass]="{'editable': category.isEditing}">
+              {{ category.name }} </span>
+            <button mat-icon-button *ngIf="!category.isEditing" (click)="editCategory(category.categoryId)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="category.isEditing" (click)="saveCategory(category.categoryId)">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="category.isEditing" (click)="cancelEdit(category.categoryId)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </div>
+        
         </mat-list-item>
       </mat-list>
+    </div>
     </mat-card-content>
   </mat-card>
-  
+</div>

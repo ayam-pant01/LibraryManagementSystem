@@ -7,41 +7,38 @@ import { MatIconModule } from '@angular/material/icon';
 import { ToastService } from '../../services/toast.service';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';   
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
-  selector: 'app-category',
+  selector: 'app-category',   
+
   standalone: true,
-  imports: [CommonModule,MatIconModule,MatCardModule,FormsModule,MatInputModule,MatListModule],
+  imports: [CommonModule, MatIconModule, MatCardModule, FormsModule, MatInputModule, MatListModule,MatButtonModule],
   templateUrl: './category.component.html',
-  styleUrl: './category.component.css'
+  styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
-  newCategoryName: string = '';
+  newCategoryName:   
+ string = '';
   categories: Category[] = [];
   editingCategoryId: number | null = null;
-  categoryService = inject(CategoryService)
-  toastService = inject(ToastService)
+
+  categoryService = inject(CategoryService);
+  toastService = inject(ToastService);
 
   ngOnInit(): void {
     this.loadCategories();
   }
 
   loadCategories() {
-      // Dummy data for testing
-      const dummyCategories: Category[] = [
-        { categoryId: 1, name: 'Fiction' },
-        { categoryId: 2, name: 'Non-Fiction' },
-        { categoryId: 3, name: 'Science Fiction' },
-        { categoryId: 4, name: 'Fantasy' }
-      ];
-  
-      // Simulate a successful response
-      this.categories = dummyCategories;
-    // this.categoryService.getCategories().subscribe({
-    //   next: (response) => this.categories = response, // Adjust according to your data structure
-    //   error: (error) => this.toastService.openSnackBar(error)
-    // });
+    this.categoryService.getCategories().subscribe({
+      next: (response) => {
+        this.categories = response.map(category => ({ ...category, isEditing: false }));
+      },
+      error: (error) => this.toastService.openSnackBar(error)
+    });
   }
 
   addCategory() {
@@ -54,8 +51,8 @@ export class CategoryComponent implements OnInit {
 
     this.categoryService.addCategory(newCategory).subscribe({
       next: (response) => {
-        this.newCategoryName = ''; // Clear input field
-        this.loadCategories(); // Refresh the list
+        this.newCategoryName = '';
+        this.loadCategories();
         this.toastService.openSnackBar('Category added successfully!');
       },
       error: (error) => this.toastService.openSnackBar(error)
@@ -67,19 +64,32 @@ export class CategoryComponent implements OnInit {
     if (category) {
       category.name = newName;
     }
-    this.editingCategoryId = categoryId;
   }
 
   editCategory(categoryId: number) {
     const category = this.categories.find(cat => cat.categoryId === categoryId);
     if (category) {
-      this.categoryService.updateCategory(categoryId,category).subscribe({
+      category.isEditing = !category.isEditing;
+    }
+  }
+
+  saveCategory(categoryId: number) {
+    const category = this.categories.find(cat => cat.categoryId === categoryId);
+    if (category) {
+      this.categoryService.updateCategory(categoryId, category).subscribe({
         next: (response) => {
-          this.editingCategoryId = null;
+          category.isEditing = false;
           this.toastService.openSnackBar('Category updated successfully!');
         },
         error: (error) => this.toastService.openSnackBar(error)
       });
+    }
+  }
+
+  cancelEdit(categoryId: number) {
+    const category = this.categories.find(cat => cat.categoryId === categoryId);
+    if (category) {
+      category.isEditing = false;
     }
   }
 }

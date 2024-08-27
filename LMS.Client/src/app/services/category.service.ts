@@ -34,13 +34,6 @@ export class CategoryService {
     );
   }
 
-  // Delete a category
-  deleteCategory(categoryId: number): Observable<Category> {
-    return this.http.delete<Category>(`${this.categoryApiUrl}/${categoryId}`).pipe(
-      catchError(this.handleError)
-    );
-  }
-
   private handleError(error: any) {
     const errorMessage = error.error?.message || 'Server error';
     return throwError(() => new Error(errorMessage)); // Updated to new syntax
