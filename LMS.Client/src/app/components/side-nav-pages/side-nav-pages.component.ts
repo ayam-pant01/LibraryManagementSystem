@@ -24,12 +24,12 @@ export class SideNavPagesComponent {
         if(userDetail != null){
           if(userDetail.role != "Librarian"){
             this.navItems = [
-              {value:"View Books", link:'login'},
+              {value:"View Books", link:'books'},
               {value:"My collections", link:'register'},
             ]
           }else{
             this.navItems = [
-              {value:"View Books", link:'register'},
+              {value:"View Books", link:'books'},
               {value:"All orders", link:'login'},
               {value:"User List", link:'register'},
               {value:"Return books", link:'login'},

@@ -1,0 +1,17 @@
+<mat-form-field appearance="fill">
+    <mat-label>Search Books</mat-label>
+    <input matInput placeholder="Enter book title">
+    <button mat-icon-button matSuffix>
+        <mat-icon>search</mat-icon>
+    </button>
+</mat-form-field>
+<mat-card>
+    <mat-card-content>
+        Showing results for 100 books.
+    </mat-card-content>
+</mat-card>
+
+<div class="flex flex-wrap justify-around gap-4 p-4">
+    <app-book-card *ngFor="let book of books" [book]="book"></app-book-card>
+  </div>
+  
