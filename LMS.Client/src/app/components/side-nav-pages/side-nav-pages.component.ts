@@ -37,7 +37,7 @@ export class SideNavPagesComponent {
                 link: '', 
                 subItems: [
                   { value: "Manage Categories", link: 'categories' },
-                  { value: "Manage Books", link: 'books' }
+                  { value: "Manage Books", link: 'manage-books' }
                 ]
               },
               { value: "All Orders", link: 'login' },

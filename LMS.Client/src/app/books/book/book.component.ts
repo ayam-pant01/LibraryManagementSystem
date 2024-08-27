@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Book } from '../../interfaces/book';
 import { BooksByCatergory } from '../../interfaces/category';
 import { BookCardComponent } from '../book-card/book-card.component';
@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './book.component.html',
   styleUrl: './book.component.css'
 })
-export class BookComponent {
+export class BookComponent implements OnInit {
   bookService = inject(BookService)
   books: Book[] = [];
   pagination?: PaginationMetaData;
