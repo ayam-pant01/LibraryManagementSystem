@@ -21,6 +21,7 @@ builder.Services.AddDbContext<LMSDBContext>(dbContextOptions
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 // repository services
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddIdentityCore<AppUser>()
     .AddRoles<IdentityRole>()

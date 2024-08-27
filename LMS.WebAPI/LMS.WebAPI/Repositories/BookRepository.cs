@@ -34,24 +34,24 @@ namespace LMS.WebAPI.Repositories
             if (!string.IsNullOrWhiteSpace(title))
             {
                 title = title.Trim();
-                bookCollection = bookCollection.Where(c => c.Title == title);
+                bookCollection = bookCollection.Where(b => b.Title == title);
 
             }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 searchQuery = searchQuery.Trim();
-                bookCollection = bookCollection.Where(c => c.Title.Contains(searchQuery)
-                    || (c.Description != null && c.Description.Contains(searchQuery))
-                    || (c.Publisher != null && c.Publisher.Contains(searchQuery))
-                    || (c.Author != null && c.Author.Contains(searchQuery)));
+                bookCollection = bookCollection.Where(b => b.Title.Contains(searchQuery)
+                    || (b.Description != null && b.Description.Contains(searchQuery))
+                    || (b.Publisher != null && b.Publisher.Contains(searchQuery))
+                    || (b.Author != null && b.Author.Contains(searchQuery)));
 
             }
 
             var totalItemCount = await bookCollection.CountAsync();
             var paginationMetaData = new PaginationMetaData(totalItemCount, pageSize, pageNumber);
 
-            var collectionToReturn = await bookCollection.OrderBy(c => c.Title)
+            var collectionToReturn = await bookCollection.OrderBy(b => b.Title)
                 .Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize)
                 .ToListAsync();
@@ -60,11 +60,11 @@ namespace LMS.WebAPI.Repositories
 
         public async Task<bool> CheckBookExistsAsync(int bookId)
         {
-            return await _lmsDbContext.Books.AnyAsync(c => c.BookId == bookId);
+            return await _lmsDbContext.Books.AnyAsync(b => b.BookId == bookId);
         }
         public async Task<bool> CheckBookExistsAsync(string isbn)
         {
-            return await _lmsDbContext.Books.AnyAsync(c => c.ISBN == isbn);
+            return await _lmsDbContext.Books.AnyAsync(b => b.ISBN == isbn);
         }
         public async Task AddBookAsync(Book book)
         {

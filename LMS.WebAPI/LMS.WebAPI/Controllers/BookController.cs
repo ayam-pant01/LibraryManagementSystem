@@ -35,7 +35,7 @@ namespace LMS.WebAPI.Controllers
         }
 
         // GET api/<BookController>/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetBookByIdAsync")]
         public async Task<ActionResult<BookDto>> GetBookByIdAsync(int id)
         {
             var book = await _bookRepository.GetBookByIdAsync(id);
