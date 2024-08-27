@@ -1,5 +1,7 @@
 using LMS.WebAPI.DBContexts;
 using LMS.WebAPI.Entities;
+using LMS.WebAPI.Interfaces;
+using LMS.WebAPI.Repositories;
 using LMS.WebAPI.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +19,8 @@ builder.Services.AddDbContext<LMSDBContext>(dbContextOptions
     => dbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("LMSDBConnectionString")));
 // injected jwt provider services
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+// repository services
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 
 builder.Services.AddIdentityCore<AppUser>()
     .AddRoles<IdentityRole>()
@@ -39,6 +43,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+
+#region AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
