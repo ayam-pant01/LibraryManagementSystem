@@ -9,19 +9,20 @@ import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';   
 import { MatButtonModule } from '@angular/material/button';
+import {MatTableModule} from '@angular/material/table';
 
 
 @Component({
   selector: 'app-category',   
 
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatCardModule, FormsModule, MatInputModule, MatListModule,MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatCardModule, FormsModule, MatInputModule, MatListModule,MatButtonModule,MatTableModule],
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
-  newCategoryName:   
- string = '';
+  newCategoryName: string = '';
+  displayedColumns: string[] = ['name', 'actions'];
   categories: Category[] = [];
   editingCategoryId: number | null = null;
 
