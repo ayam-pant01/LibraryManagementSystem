@@ -12,6 +12,6 @@
 </mat-card>
 
 <div class="flex flex-wrap justify-around gap-4 p-4">
-    <app-book-card *ngFor="let book of books" [book]="book"></app-book-card>
+    <app-book-card   *ngFor="let book of books" [book]="book"  (bookClick)="openBookDetailDialog($event)"></app-book-card>
   </div>
   

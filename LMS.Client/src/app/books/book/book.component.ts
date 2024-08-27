@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Book } from '../../interfaces/book';
 import { BooksByCatergory } from '../../interfaces/category';
-import { BookCardComponent } from '../book-card/book-card.component';
+import { BookCardComponent } from './book-card/book-card.component';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { BookService } from '../../services/book.service';
 import { PaginationMetaData } from '../../interfaces/pagination-meta-data';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { BookDetailComponent } from './book-detail/book-detail.component';
 
 @Component({
   selector: 'app-book',
@@ -23,6 +25,7 @@ export class BookComponent implements OnInit {
   pagination?: PaginationMetaData;
   booksToDisplay: BooksByCatergory[] = [];
   searchString: string = "";
+  dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.loadBooks();
@@ -32,6 +35,18 @@ export class BookComponent implements OnInit {
     this.bookService.getBooks("", this.searchString, pageNumber, pageSize).subscribe(response => {
       this.books = response.books;
       this.pagination = response.pagination;
+    });
+  }
+
+  openBookDetailDialog(book?: Book): void {
+    const dialogRef = this.dialog.open(BookDetailComponent, {
+      data: book ? { book } : null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadBooks();
+      }
     });
   }
 }

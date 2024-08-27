@@ -1,4 +1,5 @@
 import { Category } from "./category";
+import { Review } from "./review";
 
 export interface Book {
     bookId: number;
@@ -15,7 +16,7 @@ export interface Book {
     category: Category; 
     isAvailable: boolean; 
     // checkouts: Checkout[]; // Collection of associated checkouts
-    // reviews?: Review[]; // Uncomment if you later add reviews
+    reviews?: Review[]; // Uncomment if you later add reviews
   }
 
   export interface BookForCreateAndUpdateDto {

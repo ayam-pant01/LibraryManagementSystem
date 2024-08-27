@@ -1,4 +1,4 @@
-<mat-card class="flex flex-col items-center p-4 m-4 w-36 border border-red-700 rounded-lg shadow-lg">
+<mat-card (click)="onBookClick()" class="flex flex-col items-center p-4 m-4 w-36 border border-red-700 rounded-lg shadow-lg">
     <img mat-card-image [src]="book.coverImage" [alt]="book.title" class="w-full h-auto rounded-md mb-4" />
     <mat-card-content>
       <h3 class="text-lg font-semibold mb-2 text-center">{{ book.title }}</h3>

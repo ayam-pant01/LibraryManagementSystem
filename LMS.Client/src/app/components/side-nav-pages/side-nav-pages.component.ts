@@ -40,6 +40,7 @@ export class SideNavPagesComponent {
                   { value: "Manage Books", link: 'manage-books' }
                 ]
               },
+              { value: "All Books", link: 'books' },
               { value: "All Orders", link: 'login' },
               { value: "User List", link: 'register' },
               { value: "Return Books", link: 'login' }

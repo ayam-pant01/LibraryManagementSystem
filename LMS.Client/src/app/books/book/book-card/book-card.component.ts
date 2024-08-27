@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Book } from '../../interfaces/book';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Book } from '../../../interfaces/book';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
@@ -11,4 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 })
 export class BookCardComponent {
   @Input() book!: Book;
+  @Output() bookClick = new EventEmitter<Book>();
+  onBookClick() {
+    this.bookClick.emit(this.book);
+  }
 }
