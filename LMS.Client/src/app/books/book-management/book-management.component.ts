@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
 
 @Component({
   selector: 'app-book-management',
@@ -18,6 +20,7 @@ import { DatePipe } from '@angular/common';
 export class BookManagementComponent implements OnInit,AfterViewInit  {
   displayedColumns: string[] = ['title','categoryName',  'author', 'publisher', 'publicationDate', 'pageCount', 'isAvailable', 'actions'];
   bookService = inject(BookService)
+  dialog = inject(MatDialog);
   // books: Book[] = [];
   books = new MatTableDataSource<Book>();
   pagination?: PaginationMetaData;
@@ -39,6 +42,26 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
 
   onPageChange(event: any): void {
     this.loadBooks(event.pageIndex + 1, event.pageSize);
+  }
+
+  openAddEditBookDialog(book?: Book): void {
+    const dialogRef = this.dialog.open(AddEditBookComponent, {
+      data: book ? { book } : null
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadBooks(); // Reload the books after adding or editing
+      }
+    });
+  }
+
+  editBook(book: Book): void {
+    this.openAddEditBookDialog(book);
+  }
+
+  deleteBook(bookId: number): void {
+    // Implement delete logic here
   }
 
 }

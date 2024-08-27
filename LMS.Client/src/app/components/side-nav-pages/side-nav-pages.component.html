@@ -9,7 +9,7 @@
     <ng-container *ngFor="let item of navItems">
       <!-- Main navigation item -->
       <a mat-list-item
-         [routerLink]="item.link"
+         [routerLink]="item.subItems ? null : item.link"
          routerLinkActive="active-link"
          (click)="item.subItems ? toggleSubItems(item) : null">
         {{ item.value }}
