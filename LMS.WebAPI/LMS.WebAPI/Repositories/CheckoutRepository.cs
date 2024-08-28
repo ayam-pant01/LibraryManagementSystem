@@ -15,39 +15,6 @@ namespace LMS.WebAPI.Repositories
             _bookRepository = bookRepository;
         }
 
-        public async Task<IEnumerable<Checkout>> GetAllCheckoutsAsync()
-        {
-            return await _lmsDbContext.Checkouts
-                 .Include(c => c.CheckoutDetails)
-                 .ThenInclude(cd => cd.Book)
-                 .ToListAsync();
-        }
-
-        public async Task<Checkout?> GetCheckoutByIdAsync(int checkoutId)
-        {
-            return await _lmsDbContext.Checkouts
-                .Include(c => c.CheckoutDetails)
-                .ThenInclude(cd => cd.Book)
-                .FirstOrDefaultAsync(c => c.CheckoutId == checkoutId);
-        }
-
-        public async Task<IEnumerable<CheckoutDetail>> GetCheckoutDetailsByCheckoutIdAsync(int checkoutId)
-        {
-            return await _lmsDbContext.CheckoutDetails
-                .Where(cd => cd.CheckoutId == checkoutId)
-                .Include(cd => cd.Book)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<Checkout>> GetCheckoutsByUserIdAsync(string userId)
-        {
-            return await _lmsDbContext.Checkouts
-                .Where(c => c.UserId == userId)
-                .Include(c => c.CheckoutDetails)
-                    .ThenInclude(cd => cd.Book)
-                    .ToListAsync();
-        }
-
         public async Task CheckoutBooksAsync(string userId, List<int> bookIds)
         {
             using var transaction = await _lmsDbContext.Database.BeginTransactionAsync();
