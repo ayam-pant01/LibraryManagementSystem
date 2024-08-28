@@ -31,12 +31,7 @@
               <p class="font-bold">{{ review.reviewerName }}</p>
             </div>
             <div class="flex-1 flex items-center">
-              <ng-container *ngFor="let star of [].constructor(review.rating); let i = index">
-                <mat-icon>star</mat-icon>
-              </ng-container>
-              <ng-container *ngFor="let star of [].constructor(5 - review.rating); let i = index">
-                <mat-icon>star_border</mat-icon>
-              </ng-container>
+              <app-star-rating [rating]="review.rating"></app-star-rating>
             </div>
           </div>
           <p>{{ review.comment }}</p>

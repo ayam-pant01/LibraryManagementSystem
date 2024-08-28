@@ -15,6 +15,7 @@ export interface Book {
     categoryName?: string; 
     category: Category; 
     isAvailable: boolean; 
+    averageRating:number;
     // checkouts: Checkout[]; // Collection of associated checkouts
     reviews?: Review[]; // Uncomment if you later add reviews
   }
