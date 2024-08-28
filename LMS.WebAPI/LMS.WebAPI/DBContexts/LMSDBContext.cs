@@ -26,6 +26,10 @@ public class LMSDBContext : IdentityDbContext<AppUser>
             .Property(p => p.RowVersion)
             .IsRowVersion();
 
+        modelBuilder.Entity<CheckoutDetail>()
+            .Property(p => p.RowVersion)
+            .IsRowVersion();
+
         modelBuilder.Entity<Book>()
           .HasOne(b => b.Category)
           .WithMany(c => c.Books)

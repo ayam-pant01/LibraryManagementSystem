@@ -18,5 +18,7 @@ namespace LMS.WebAPI.Entities
         public int BookId { get; set; }
         public Book Book { get; set; }
         public DateTime? ReturnedDate { get; set; }
+        [Timestamp]
+        public byte[] RowVersion { get; set; }  // Concurrency token used to handle concurrency on book return
     }
 }
