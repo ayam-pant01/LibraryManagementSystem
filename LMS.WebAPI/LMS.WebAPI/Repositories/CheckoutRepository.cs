@@ -80,7 +80,7 @@ namespace LMS.WebAPI.Repositories
                 }).ToList();
 
                 await _lmsDbContext.Checkouts.AddAsync(checkout);
-                await SaveChangesAsync();
+                await SaveChangesAsync(); // saved to get new checkout  id
 
                 foreach (var detail in checkoutDetails)
                 {
@@ -97,6 +97,12 @@ namespace LMS.WebAPI.Repositories
 
                 await SaveChangesAsync();
                 await transaction.CommitAsync();
+
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                await transaction.RollbackAsync();
+                throw new Exception($"An error occurred while checking out books: One of the books must have been already checkedout by another user", ex);
 
             }
             catch (Exception ex)

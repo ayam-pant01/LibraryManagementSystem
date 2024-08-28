@@ -1,4 +1,5 @@
-﻿using LMS.WebAPI.DataSeeders;
+﻿using Bogus;
+using LMS.WebAPI.DataSeeders;
 using LMS.WebAPI.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,7 +21,11 @@ public class LMSDBContext : IdentityDbContext<AppUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-     
+        
+        modelBuilder.Entity<Book>()
+            .Property(p => p.RowVersion)
+            .IsRowVersion();
+
         modelBuilder.Entity<Book>()
           .HasOne(b => b.Category)
           .WithMany(c => c.Books)

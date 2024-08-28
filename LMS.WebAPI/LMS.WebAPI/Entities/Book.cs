@@ -36,6 +36,8 @@ namespace LMS.WebAPI.Entities
         //can be used in future to see the list of users that have checked out this book in the past.
         public ICollection<CheckoutDetail> CheckoutDetails { get; set; } = new List<CheckoutDetail>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        [Timestamp]
+        public byte[] RowVersion { get; set; }  // Concurrency token used to handle concurrency on book checkout
 
     }
 }
