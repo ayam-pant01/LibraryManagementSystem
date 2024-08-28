@@ -23,6 +23,7 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 // repository services
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
 // added for seeding data on app startup
 builder.Services.AddScoped<DataSeeder>();
 
