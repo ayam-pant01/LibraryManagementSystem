@@ -7,7 +7,8 @@ namespace LMS.WebAPI.Profiles
         public ReviewProfile()
         {
             CreateMap<Entities.Review, Models.ReviewDto>()
-                .ForMember(dest => dest.ReviewerName, opt => opt.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+                .ForMember(dest => dest.ReviewerName, opt => opt.MapFrom(src =>
+                    $"{src.User.FirstName} {(string.IsNullOrEmpty(src.User.MiddleName) ? "" : src.User.MiddleName + " ")}{src.User.LastName}"));
         }
     }
 }

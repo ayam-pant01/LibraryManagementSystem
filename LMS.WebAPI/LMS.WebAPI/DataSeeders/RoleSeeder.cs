@@ -4,7 +4,7 @@ namespace LMS.WebAPI.DataSeeders
 {
     public class RoleSeeder
     {
-        public static List<IdentityRole> GenerateRoles()
+        public static IEnumerable<IdentityRole> GenerateRoles()
         {
             var roles = new List<IdentityRole>
             {
