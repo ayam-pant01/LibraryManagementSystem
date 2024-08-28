@@ -1,3 +1,4 @@
+using LMS.WebAPI.DataSeeders;
 using LMS.WebAPI.DBContexts;
 using LMS.WebAPI.Entities;
 using LMS.WebAPI.Interfaces;
@@ -22,6 +23,8 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 // repository services
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+// added for seeding data on app startup
+builder.Services.AddScoped<DataSeeder>();
 
 builder.Services.AddIdentityCore<AppUser>()
     .AddRoles<IdentityRole>()
@@ -83,6 +86,12 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 var app = builder.Build();
 
+// Seed the database
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

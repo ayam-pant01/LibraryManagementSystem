@@ -15,6 +15,7 @@ public class LMSDBContext : IdentityDbContext<AppUser>
     public DbSet<Category> Categories { get; set; }
     public DbSet<Book> Books { get; set; }
     public DbSet<Checkout> Checkouts { get; set; }
+    public DbSet<CheckoutDetail> CheckoutDetails { get; set; }
     public DbSet<Review> Reviews { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,21 +27,33 @@ public class LMSDBContext : IdentityDbContext<AppUser>
           .HasForeignKey(b => b.CategoryId);
 
         modelBuilder.Entity<Checkout>()
-            .HasOne(c => c.Book)
-            .WithMany(b => b.Checkouts)
-            .HasForeignKey(c => c.BookId);
+            .HasMany(c => c.CheckoutDetails)
+            .WithOne(cd=>cd.Checkout)
+            .HasForeignKey(cd => cd.CheckoutId);
 
         modelBuilder.Entity<Book>()
               .HasMany(b => b.Reviews)
               .WithOne(r => r.Book)
               .HasForeignKey(r => r.BookId);
 
-        var roles = RoleSeeder.GenerateRoles();
-        modelBuilder.Entity<IdentityRole>().HasData(roles);
-        var categories = CategorySeeder.GenerateCategories();
-        modelBuilder.Entity<Category>().HasData(categories);
-        var books = BookSeeder.GenerateBooks();
-        modelBuilder.Entity<Book>().HasData(books);
+        modelBuilder.Entity<CheckoutDetail>()
+            .HasOne(cd=>cd.Checkout)
+            .WithMany(c=>c.CheckoutDetails)
+            .HasForeignKey(cd=>cd.CheckoutId);
+        //    .OnDelete(DeleteBehavior.Cascade); // look into on delete behavior
+
+        modelBuilder.Entity<CheckoutDetail>()
+           .HasOne(cd => cd.Book)
+           .WithMany(b => b.CheckoutDetails)
+           .HasForeignKey(cd => cd.BookId);
+        //   .OnDelete(DeleteBehavior.Restrict); // look into on delete behavior
+
+        //var roles = RoleSeeder.GenerateRoles();
+        //modelBuilder.Entity<IdentityRole>().HasData(roles);
+        //var categories = CategorySeeder.GenerateCategories();
+        //modelBuilder.Entity<Category>().HasData(categories);
+        //var books = BookSeeder.GenerateBooks();
+        //modelBuilder.Entity<Book>().HasData(books);
 
     }
 }
