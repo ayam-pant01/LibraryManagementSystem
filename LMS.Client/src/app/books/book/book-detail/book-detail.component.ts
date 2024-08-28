@@ -20,34 +20,6 @@ export class BookDetailComponent {
     public dialogRef: MatDialogRef<BookDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { book: Book }
   ) {
-    console.log("bookdata",this.data.book)
-    const sampleReviews: Review[] = [
-      {
-        reviewerName: "Harry Porter",
-        userId: 101,
-        bookId: 1,
-        rating: 5,
-        comment: "An absolutely captivating book! A must-read for everyone.",
-        reviewDate: new Date('2024-08-01')
-      },
-      {
-        reviewerName: "John bush",
-        userId: 102,
-        bookId: 1,
-        rating: 4,
-        comment: "Great storyline, but the ending was a bit predictable.Great storyline, but the ending was a bit predictableGreat storyline, but the ending was a bit predictablGreat storyline, but the ending was a bit predictableGreat storyline, but the ending was a bit predictableGreat storyline, but the ending was a bit predictableGreat storyline, but the ending was a bit predictableGreat storyline, but the ending was a bit predictableGreat storyline, but the ending was a bit predictablee",
-        reviewDate: new Date('2024-08-02')
-      },
-      {
-        reviewerName: "Jimmy carter",
-        userId: 103,
-        bookId: 1,
-        rating: 3,
-        comment: "It was an average read. Some parts were engaging, others not so much.",
-        reviewDate: new Date('2024-08-03')
-      }
-    ];
-    this.data.book.reviews = sampleReviews
   }
   onClose(): void {
     this.dialogRef.close();

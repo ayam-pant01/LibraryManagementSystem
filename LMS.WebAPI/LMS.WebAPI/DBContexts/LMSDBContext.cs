@@ -30,6 +30,11 @@ public class LMSDBContext : IdentityDbContext<AppUser>
             .WithMany(b => b.Checkouts)
             .HasForeignKey(c => c.BookId);
 
+        modelBuilder.Entity<Book>()
+              .HasMany(b => b.Reviews)
+              .WithOne(r => r.Book)
+              .HasForeignKey(r => r.BookId);
+
         var roles = RoleSeeder.GenerateRoles();
         modelBuilder.Entity<IdentityRole>().HasData(roles);
         var categories = CategorySeeder.GenerateCategories();

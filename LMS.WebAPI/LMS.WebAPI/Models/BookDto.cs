@@ -13,5 +13,7 @@
         public int PageCount { get; set; }
         public string CategoryName { get; set; } 
         public bool IsAvailable { get; set; }
+        public double AverageRating { get; set; }
+        public ICollection<ReviewDto> Reviews { get; set; }
     }
 }

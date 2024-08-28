@@ -34,6 +34,7 @@ namespace LMS.WebAPI.Entities
         public Category Category { get; set; }
         public bool IsAvailable { get; set; } = true;
         public ICollection<Checkout> Checkouts { get; set; }
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
         //public ICollection<Review> Reviews { get; set; }
     }
 }

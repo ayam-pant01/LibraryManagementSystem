@@ -1,7 +1,6 @@
 export interface Review {
+    reviewId:number,
     reviewerName:string,
-    userId:number,
-    bookId:number,
     rating:number,
     comment:string,
     reviewDate: Date

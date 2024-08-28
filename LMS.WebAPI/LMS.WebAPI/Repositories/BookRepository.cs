@@ -20,17 +20,28 @@ namespace LMS.WebAPI.Repositories
 
         public async Task<Book?> GetBookByIdAsync(int id)
         {
-            return await _lmsDbContext.Books.Include(b => b.Category)
-                                     .FirstOrDefaultAsync(b => b.BookId == id);
+            return await _lmsDbContext.Books
+                .Include(b => b.Category)
+                .Include(b => b.Reviews)
+                    .ThenInclude(r => r.User)
+                    .FirstOrDefaultAsync(b => b.BookId == id);
         }
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _lmsDbContext.Books.Include(b => b.Category).ToListAsync();
+            return await _lmsDbContext.Books
+                .Include(b => b.Category)
+                .Include(b => b.Reviews)
+                    .ThenInclude(r => r.User)
+                    .ToListAsync();
         }
 
         public async Task<(IEnumerable<Book>, PaginationMetaData)> GetAllBooksAsync(string? title, string? searchQuery, int pageNumber, int pageSize)
         {
-            var bookCollection = _lmsDbContext.Books.Include(b=>b.Category) as IQueryable<Book>;
+            var bookCollection = _lmsDbContext.Books
+                .Include(b => b.Category)
+                .Include(b => b.Reviews)
+                    .ThenInclude(r => r.User) as IQueryable<Book>;
+
             if (!string.IsNullOrWhiteSpace(title))
             {
                 title = title.Trim();
@@ -73,7 +84,7 @@ namespace LMS.WebAPI.Repositories
 
         public void DeleteBook(Book book)
         {
-             _lmsDbContext.Books.Remove(book);
+            _lmsDbContext.Books.Remove(book);
         }
         public async Task<bool> SaveChangesAsync()
         {

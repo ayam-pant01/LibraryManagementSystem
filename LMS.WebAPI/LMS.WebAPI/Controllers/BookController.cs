@@ -7,6 +7,7 @@ using LMS.WebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using static System.Reflection.Metadata.BlobBuilder;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,7 +32,14 @@ namespace LMS.WebAPI.Controllers
         {
             var (bookEntities, paginationMetaData) = await _bookRepository.GetAllBooksAsync(title, searchQuery, pageNumber, pageSize);
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
-            return Ok(_mapper.Map<IEnumerable<BookDto>>(bookEntities));
+            var bookDtos = bookEntities.Select(book =>
+                            {
+                                var bookDto = _mapper.Map<BookDto>(book);
+                                bookDto.AverageRating = book.Reviews.Any() ? book.Reviews.Average(r => r.Rating): 0;
+                                return bookDto;
+                            }).ToList();
+
+            return Ok(bookDtos);
         }
 
         // GET api/<BookController>/5
@@ -43,7 +51,10 @@ namespace LMS.WebAPI.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<BookDto>(book));
+
+            var bookDto = _mapper.Map<BookDto>(book);
+            bookDto.AverageRating = bookDto.Reviews.Any() ? bookDto.Reviews.Average(r => r.Rating) : 0;
+            return Ok(bookDto);
         }
 
         // POST api/<BookController>
