@@ -485,3 +485,10 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+
+LMS.WebAPI/.config/dotnet-tools.json
+LMS.WebAPI/Properties/serviceDependencies.json
+LMS.WebAPI/Properties/serviceDependencies.lms-appsvcs - Web Deploy1.json
+LMS.WebAPI/Properties/ServiceDependencies/lms-appsvcs - Web Deploy1/mssql1.arm.json
+LMS.WebAPI/Properties/ServiceDependencies/lms-appsvcs - Web Deploy1/profile.arm.json
