@@ -18,12 +18,15 @@ export class SideNavPagesComponent {
   panelName = '';
   navItems: NavItems[] = [];
   expandedItem: NavItems | null = null;
+  isLoggedIn: boolean = false;
+
   constructor() {
-  this.authService.userLoggedIn.subscribe({
+  this.authService.userLoggedIn$.subscribe({
     next:(status)=>{
+      this.isLoggedIn = status;
       if(status){
-        let userDetail = this.authService.getUserDetail();
-        if(userDetail != null){
+        const userDetail = this.authService.getUserDetail();
+        if(userDetail){
           if(userDetail.role != "Librarian"){
             this.navItems = [
               {value:"View Books", link:'books'},
@@ -54,6 +57,9 @@ export class SideNavPagesComponent {
           }
           this.panelName = userDetail.role;
         }
+      }
+      else {
+        this.navItems = []
       }
     }
   })

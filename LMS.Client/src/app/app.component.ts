@@ -13,11 +13,7 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent  {
   authService = inject(AuthService);
-  ngOnInit(): void {
-   let status = this.authService.isLoggedIn()
-   this.authService.userLoggedIn.next(status);
-  }
   title = 'LMS.Client';
 }

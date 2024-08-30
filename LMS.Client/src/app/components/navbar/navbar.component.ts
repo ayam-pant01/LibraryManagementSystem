@@ -31,7 +31,7 @@ userDetail : any = null;
 isLoggedIn : boolean = false;
 
 constructor() {
-  this.authService.userLoggedIn.subscribe({
+  this.authService.userLoggedIn$.subscribe({
     next:(status)=>{
       if(status){
         this.userDetail = this.authService.getUserDetail();
@@ -44,7 +44,7 @@ constructor() {
 logout=()=>{
   this.authService.logout();
   this.toastService.openSnackBar("Logout Success");
-  this.authService.userLoggedIn.next(false);
+  // this.authService.userLoggedIn.next(false);
   this.router.navigate(['/'])
 }  
 }

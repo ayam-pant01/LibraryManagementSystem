@@ -1,11 +1,17 @@
-<mat-card class="border-solid w-fit">
+<mat-card class="border-solid w-fit" *ngIf="isLoggedIn">
     <mat-card-content>
       <h2>Welcome!</h2>
       <span class="align-middle">{{ panelName }} portal</span>
     </mat-card-content>
   </mat-card>
+  <mat-card class="border-solid w-fit" *ngIf="!isLoggedIn">
+    <mat-card-content>
+      <h2>Login to Continue</h2>
+      <span class="align-middle">Please log in to access the portal.</span>
+    </mat-card-content>
+  </mat-card>
   
-  <mat-nav-list>
+  <mat-nav-list *ngIf="isLoggedIn">
     <ng-container *ngFor="let item of navItems">
       
       <a mat-list-item

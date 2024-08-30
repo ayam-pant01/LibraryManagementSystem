@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
       this.authService.login(this.loginForm.value).subscribe({
         next:(response)=>{
           this.toastService.openSnackBar(response.message!);
-          this.authService.userLoggedIn.next(true);
+          // this.authService.userLoggedIn.next(true);
           this.router.navigate(['/'])
         },
         error:(error)=>{
