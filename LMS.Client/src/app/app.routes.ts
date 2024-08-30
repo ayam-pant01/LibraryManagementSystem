@@ -5,6 +5,7 @@ import { RegisterComponent } from './account/register/register.component';
 import { BookComponent } from './books/book/book.component';
 import { CategoryComponent } from './books/category/category.component';
 import { BookManagementComponent } from './books/book-management/book-management.component';
+import { CheckoutListComponent } from './return/checkout-list/checkout-list.component';
 
 export const routes: Routes = [
     {
@@ -24,5 +25,8 @@ export const routes: Routes = [
     },
     {
         path:"categories",component:CategoryComponent
+    },
+    {
+        path:"checkout-list",component:CheckoutListComponent
     }
 ];

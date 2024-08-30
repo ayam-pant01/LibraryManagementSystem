@@ -38,20 +38,20 @@ export class BookService {
     );
   }
 
-  createBook(book: BookForCreateAndUpdateDto): Observable<Book> {
-    return this.http.post<Book>(this.bookApiUrl, book).pipe(
+  createBook(book: BookForCreateAndUpdateDto): Observable<any> {
+    return this.http.post<any>(this.bookApiUrl, book).pipe(
       catchError(this.handleError)
     );
   }
 
-  updateBook(id: number, book: BookForCreateAndUpdateDto): Observable<void> {
-    return this.http.put<void>(`${this.bookApiUrl}/${id}`, book).pipe(
+  updateBook(id: number, book: BookForCreateAndUpdateDto): Observable<any> {
+    return this.http.put<any>(`${this.bookApiUrl}/${id}`, book).pipe(
       catchError(this.handleError)
     );
   }
 
-  deleteBook(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.bookApiUrl}/${id}`).pipe(
+  deleteBook(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.bookApiUrl}/${id}`).pipe(
       catchError(this.handleError)
     );
   }

@@ -11,6 +11,7 @@ import { PaginationMetaData } from '../../interfaces/pagination-meta-data';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BookDetailComponent } from './book-detail/book-detail.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-book',
@@ -26,17 +27,22 @@ export class BookComponent implements OnInit {
   booksToDisplay: BooksByCatergory[] = [];
   searchString: string = "";
   dialog = inject(MatDialog);
+  toastService = inject(ToastService)
 
   ngOnInit(): void {
     this.loadBooks();
   }
 
   loadBooks(pageNumber: number = 1, pageSize: number = 10): void {
-    this.bookService.getBooks("", this.searchString, pageNumber, pageSize).subscribe(response => {
-      this.books = response.books;
-      this.pagination = response.pagination;
+    this.bookService.getBooks("", this.searchString, pageNumber, pageSize).subscribe({
+      next: (response) => {
+        this.books = response.books;
+        this.pagination = response.pagination;
+      },
+      error: (error) => this.toastService.openSnackBar(error)
     });
   }
+  
 
   openBookDetailDialog(book?: Book): void {
     const dialogRef = this.dialog.open(BookDetailComponent, {

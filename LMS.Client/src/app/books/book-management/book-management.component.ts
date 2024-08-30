@@ -9,6 +9,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-book-management',
@@ -21,6 +22,7 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
   displayedColumns: string[] = ['title','categoryName',  'author', 'publisher', 'publicationDate', 'pageCount', 'isAvailable', 'actions'];
   bookService = inject(BookService)
   dialog = inject(MatDialog);
+  toastService = inject(ToastService)
   books = new MatTableDataSource<Book>();
   pagination?: PaginationMetaData;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -33,9 +35,12 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
   }
 
   loadBooks(pageNumber: number = 1, pageSize: number = 10): void {
-    this.bookService.getBooks("", "", pageNumber, pageSize).subscribe(response => {
-      this.books.data = response.books;
-      this.pagination = response.pagination;
+    this.bookService.getBooks("", "", pageNumber, pageSize).subscribe({
+      next: (response) => {
+        this.books.data = response.books;
+        this.pagination = response.pagination;
+      },
+      error: (error) => this.toastService.openSnackBar(error)
     });
   }
 

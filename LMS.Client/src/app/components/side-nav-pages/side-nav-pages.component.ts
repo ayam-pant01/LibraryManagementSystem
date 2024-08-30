@@ -43,7 +43,14 @@ export class SideNavPagesComponent {
               { value: "All Books", link: 'books' },
               { value: "All Orders", link: 'login' },
               { value: "User List", link: 'register' },
-              { value: "Return Books", link: 'login' }
+              {
+                value: "Return Management",
+                link: '', 
+                subItems: [
+                  { value: "Checkout List", link: 'checkout-list' },
+                  { value: "Return List", link: 'manage-books' }
+                ]
+              },
             ];
           }
           this.panelName = userDetail.role;

@@ -54,9 +54,9 @@ export class CategoryComponent implements OnInit {
       next: (response) => {
         this.newCategoryName = '';
         this.loadCategories();
-        this.toastService.openSnackBar('Category added successfully!');
+        this.toastService.openSnackBar(response.message);
       },
-      error: (error) => this.toastService.openSnackBar(error)
+      error: (error) => this.toastService.openSnackBar(error.message)
     });
   }
 
@@ -80,9 +80,9 @@ export class CategoryComponent implements OnInit {
       this.categoryService.updateCategory(categoryId, category).subscribe({
         next: (response) => {
           category.isEditing = false;
-          this.toastService.openSnackBar('Category updated successfully!');
+          this.toastService.openSnackBar(response.message);
         },
-        error: (error) => this.toastService.openSnackBar(error)
+        error: (error) => this.toastService.openSnackBar(error.message)
       });
     }
   }

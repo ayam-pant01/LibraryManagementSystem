@@ -19,14 +19,14 @@ export class CategoryService {
     );
   }
 
-  addCategory(category: Category): Observable<Category> {
-    return this.http.post<Category>(this.categoryApiUrl, category).pipe(
+  addCategory(category: Category): Observable<any> {
+    return this.http.post<any>(this.categoryApiUrl, category).pipe(
       catchError(this.handleError)
     );
   }
 
-  updateCategory(categoryId: number, category: Category): Observable<Category> {
-    return this.http.put<Category>(`${this.categoryApiUrl}/${categoryId}`, category).pipe(
+  updateCategory(categoryId: number, category: Category): Observable<any> {
+    return this.http.put<any>(`${this.categoryApiUrl}/${categoryId}`, category).pipe(
       catchError(this.handleError)
     );
   }

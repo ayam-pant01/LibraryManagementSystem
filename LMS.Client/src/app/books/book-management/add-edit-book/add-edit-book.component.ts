@@ -9,6 +9,7 @@ import { BookService } from '../../../services/book.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-add-edit-book',
@@ -21,6 +22,7 @@ export class AddEditBookComponent implements OnInit {
   bookForm!: FormGroup;
   fb = inject(FormBuilder);
   bookService = inject(BookService);
+  toastService = inject(ToastService)
   isEditMode: boolean = false;
 
   constructor(
@@ -44,24 +46,37 @@ export class AddEditBookComponent implements OnInit {
       categoryId: [this.data?.book?.categoryId || 1, [Validators.required]]
     });
   }
-  
+
   onSubmit(): void {
     if (this.bookForm.invalid) {
       return;
     }
-
-    const bookData: Book = this.bookForm.value;
-
-    if (this.isEditMode) {
-      this.bookService.updateBook(this.data?.book?.bookId,bookData).subscribe(() => {
-        this.dialogRef.close(true);
+    const bookData = this.bookForm.value as Book;
+    if (this.isEditMode && this.data?.book?.bookId) {
+      this.bookService.updateBook(this.data.book.bookId, bookData).subscribe({
+        next: (response) => {
+          this.toastService.openSnackBar(response.message); 
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          this.toastService.openSnackBar(error.message);  
+        }
       });
     } else {
-      this.bookService.createBook(bookData).subscribe(() => {
-        this.dialogRef.close(true);
+      this.bookService.createBook(bookData).subscribe({
+        next: (response) => {
+          console.log("Book created successfully", response);
+          this.toastService.openSnackBar(response.message); 
+          this.dialogRef.close(true);  
+        },
+        error: (error) => {
+          console.error("Creation failed", error);
+          this.toastService.openSnackBar(error); 
+        }
       });
     }
   }
+  
 
   onCancel(): void {
     this.dialogRef.close(false);
