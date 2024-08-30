@@ -10,6 +10,8 @@ import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEditBookComponent } from './add-edit-book/add-edit-book.component';
 import { ToastService } from '../../services/toast.service';
+import { Category } from '../../interfaces/category';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-book-management',
@@ -26,8 +28,13 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
   books = new MatTableDataSource<Book>();
   pagination?: PaginationMetaData;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  categories: Category[] = [];
+  route = inject(ActivatedRoute);
   
   ngOnInit(): void {
+    this.route.data.subscribe(data=>{
+      this.categories = data['categories'];
+    })
     this.loadBooks();
   }
   ngAfterViewInit() {
@@ -50,7 +57,10 @@ export class BookManagementComponent implements OnInit,AfterViewInit  {
 
   openAddEditBookDialog(book?: Book): void {
     const dialogRef = this.dialog.open(AddEditBookComponent, {
-      data: book ? { book } : null
+      data: {
+        book: book ? book : null,
+        categories: this.categories
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {

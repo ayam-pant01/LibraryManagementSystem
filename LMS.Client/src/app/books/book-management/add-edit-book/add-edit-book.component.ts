@@ -10,11 +10,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { ToastService } from '../../../services/toast.service';
+import { Category } from '../../../interfaces/category';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-add-edit-book',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,MatInputModule,MatDatepickerModule,MatIconModule,MatButtonModule,MatCardModule],
+  imports: [CommonModule,ReactiveFormsModule,MatInputModule,MatDatepickerModule,MatIconModule,MatButtonModule,MatCardModule,MatSelectModule],
   templateUrl: './add-edit-book.component.html',
   styleUrl: './add-edit-book.component.css'
 })
@@ -24,15 +26,13 @@ export class AddEditBookComponent implements OnInit {
   bookService = inject(BookService);
   toastService = inject(ToastService)
   isEditMode: boolean = false;
+  categories: Category[] = [];
+  private dialogRef = inject(MatDialogRef<AddEditBookComponent>);
+  private data = inject(MAT_DIALOG_DATA) as { book?: Book; categories: Category[] };
 
-  constructor(
-    public dialogRef: MatDialogRef<AddEditBookComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any | null
-  ) {
-  }
 
   ngOnInit(): void {
-    this.isEditMode = !!this.data;
+    this.isEditMode = !!this.data.book;
     this.bookForm = this.fb.group({
       bookId: [this.data?.book?.bookId || null],
       title: [this.data?.book?.title || '', [Validators.required, Validators.maxLength(255)]],
@@ -43,8 +43,9 @@ export class AddEditBookComponent implements OnInit {
       publicationDate: [this.data?.book?.publicationDate || new Date(), [Validators.required]],
       isbn: [this.data?.book?.isbn || '', [Validators.required, Validators.maxLength(20)]],
       pageCount: [this.data?.book?.pageCount || 0, [Validators.required, Validators.min(1)]],
-      categoryId: [this.data?.book?.categoryId || 1, [Validators.required]]
+      categoryId: [this.data?.book?.categoryId || null, [Validators.required]]
     });
+    this.categories = this.data.categories;
   }
 
   onSubmit(): void {
@@ -65,7 +66,6 @@ export class AddEditBookComponent implements OnInit {
     } else {
       this.bookService.createBook(bookData).subscribe({
         next: (response) => {
-          console.log("Book created successfully", response);
           this.toastService.openSnackBar(response.message); 
           this.dialogRef.close(true);  
         },

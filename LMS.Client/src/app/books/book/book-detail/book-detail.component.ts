@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Book } from '../../../interfaces/book';
 import { MatCardModule } from '@angular/material/card';
@@ -16,11 +16,8 @@ import { StarRatingComponent } from '../../../components/star-rating/star-rating
   styleUrl: './book-detail.component.css'
 })
 export class BookDetailComponent {
-  constructor(
-    public dialogRef: MatDialogRef<BookDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { book: Book }
-  ) {
-  }
+  private dialogRef = inject(MatDialogRef<BookDetailComponent>);
+  data = inject(MAT_DIALOG_DATA) as { book: Book };
   onClose(): void {
     this.dialogRef.close();
   }

@@ -23,7 +23,6 @@ export class SideNavPagesComponent {
     next:(status)=>{
       if(status){
         let userDetail = this.authService.getUserDetail();
-        console.log("comeshere",userDetail);
         if(userDetail != null){
           if(userDetail.role != "Librarian"){
             this.navItems = [
@@ -54,7 +53,6 @@ export class SideNavPagesComponent {
             ];
           }
           this.panelName = userDetail.role;
-          console.log("Panel name printed", this.panelName);
         }
       }
     }

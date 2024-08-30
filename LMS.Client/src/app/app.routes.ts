@@ -6,6 +6,7 @@ import { BookComponent } from './books/book/book.component';
 import { CategoryComponent } from './books/category/category.component';
 import { BookManagementComponent } from './books/book-management/book-management.component';
 import { CheckoutListComponent } from './return/checkout-list/checkout-list.component';
+import { categoryResolver } from './resolvers/category.resolver';
 
 export const routes: Routes = [
     {
@@ -18,7 +19,7 @@ export const routes: Routes = [
         path:"register",component:RegisterComponent
     },
     {
-        path:"manage-books",component:BookManagementComponent
+        path:"manage-books",component:BookManagementComponent,resolve:{ categories: categoryResolver}
     },
     {
         path:"books",component:BookComponent

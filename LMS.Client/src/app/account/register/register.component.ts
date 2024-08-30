@@ -93,7 +93,6 @@ export class RegisterComponent {
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          console.log("error",err);
           this.toastService.openSnackBar('Registration failed!');
         },
       });
