@@ -42,17 +42,17 @@ namespace LMS.WebAPI.Controllers
             return Ok(checkoutDetailDtos);
         }
 
-        [HttpPost("return-book/{checkoutDetailId}")]
+        [HttpPut("return-book/{checkoutDetailId}")]
         public async Task<IActionResult> ReturnBook(int checkoutDetailId)
         {
             try
             {
                 await _returnRepository.ReturnBookAsync(checkoutDetailId);
-                return Ok("Book returned successfully.");
+                return Ok(new { message = $"Book returned successfully." });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
 

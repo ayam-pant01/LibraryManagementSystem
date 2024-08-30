@@ -35,7 +35,7 @@ namespace LMS.WebAPI.Controllers
             var bookDtos = bookEntities.Select(book =>
                             {
                                 var bookDto = _mapper.Map<BookDto>(book);
-                                bookDto.AverageRating = book.Reviews.Any() ? book.Reviews.Average(r => r.Rating): 0;
+                                bookDto.AverageRating = book.Reviews.Any() ? book.Reviews.Average(r => r.Rating) : 0;
                                 return bookDto;
                             }).ToList();
 
@@ -49,7 +49,7 @@ namespace LMS.WebAPI.Controllers
             var book = await _bookRepository.GetBookByIdAsync(id);
             if (book is null)
             {
-                return NotFound();
+                return NotFound(new { message = $"Book with the id {id} was not found." });
             }
 
             var bookDto = _mapper.Map<BookDto>(book);
@@ -59,58 +59,77 @@ namespace LMS.WebAPI.Controllers
 
         // POST api/<BookController>
         [HttpPost]
-        public async Task<ActionResult<BookDto>> CreateBookAsync([FromBody] BookForCreateAndUpdateDto value)
+        public async Task<IActionResult> CreateBookAsync([FromBody] BookForCreateAndUpdateDto value)
         {
-            if (await _bookRepository.CheckBookExistsAsync(value.ISBN))
+            try
             {
-                return Conflict(new { message = $"A book with ISBN {value.ISBN} already exists. Cannot enter duplicate." });
-            }
 
-            var newBook = _mapper.Map<Book>(value);
-
-            await _bookRepository.AddBookAsync(newBook);
-            await _bookRepository.SaveChangesAsync();
-
-            var createdBook = _mapper.Map<BookDto>(newBook);
-
-            return CreatedAtRoute("GetBookByIdAsync",
-                new
+                if (await _bookRepository.CheckBookExistsAsync(value.ISBN))
                 {
-                    id = createdBook.BookId
-                },
-                createdBook);
+                    return Conflict(new { message = $"A book with ISBN {value.ISBN} already exists. Cannot enter duplicate." });
+                }
+
+                var newBook = _mapper.Map<Book>(value);
+
+                await _bookRepository.AddBookAsync(newBook);
+                await _bookRepository.SaveChangesAsync();
+
+                var createdBook = _mapper.Map<BookDto>(newBook);
+
+                return Ok(new { message = $"Book created successfully." });
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while creating the book. Please try again later." });
+
+            }
         }
 
         // PUT api/<BookController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateBookAsync(int id, [FromBody] BookForCreateAndUpdateDto value)
+        public async Task<IActionResult> UpdateBookAsync(int id, [FromBody] BookForCreateAndUpdateDto value)
         {
-            var bookEntity = await _bookRepository.GetBookByIdAsync(id);
-            if (bookEntity == null)
+            try
             {
-                return NotFound(new { message = $"Book with the id {id} was not found." });
+                var bookEntity = await _bookRepository.GetBookByIdAsync(id);
+                if (bookEntity == null)
+                {
+                    return NotFound(new { message = $"Book with the id {id} was not found." });
+                }
+                if (bookEntity.ISBN != value.ISBN && await _bookRepository.CheckBookExistsAsync(value.ISBN))
+                {
+                    return Conflict(new { message = $"A book with ISBN {value.ISBN} already exists. Cannot enter duplicate." });
+                }
+                _mapper.Map(value, bookEntity);
+                await _bookRepository.SaveChangesAsync();
+                return Ok(new { message = $"Book updated successfully." });
             }
-            if (bookEntity.ISBN != value.ISBN && await _bookRepository.CheckBookExistsAsync(value.ISBN))
+            catch (Exception ex)
             {
-                return Conflict(new { message = $"A book with ISBN {value.ISBN} already exists. Cannot enter duplicate." });
+                return BadRequest(new { message = "An error occurred while updating the book. Please try again later." });
             }
-            _mapper.Map(value, bookEntity);
-            await _bookRepository.SaveChangesAsync();
-            return NoContent();
         }
 
         // DELETE api/<BookController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var bookEntity = await _bookRepository.GetBookByIdAsync(id);
-            if (bookEntity == null)
+            try
             {
-                return NotFound(new { message = $"Book with the id {id} was not found." });
+                var bookEntity = await _bookRepository.GetBookByIdAsync(id);
+                if (bookEntity == null)
+                {
+                    return NotFound(new { message = $"Book with the id {id} was not found." });
+                }
+                _bookRepository.DeleteBook(bookEntity);
+                await _bookRepository.SaveChangesAsync();
+                return Ok(new { message = $"Book deleted successfully." });
             }
-            _bookRepository.DeleteBook(bookEntity);
-            await _bookRepository.SaveChangesAsync();
-            return NoContent();
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while deleting the book. Please try again later." });
+            }
         }
     }
 }

@@ -57,12 +57,6 @@ public class LMSDBContext : IdentityDbContext<AppUser>
            .HasForeignKey(cd => cd.BookId);
         //   .OnDelete(DeleteBehavior.Restrict); // look into on delete behavior
 
-        //var roles = RoleSeeder.GenerateRoles();
-        //modelBuilder.Entity<IdentityRole>().HasData(roles);
-        //var categories = CategorySeeder.GenerateCategories();
-        //modelBuilder.Entity<Category>().HasData(categories);
-        //var books = BookSeeder.GenerateBooks();
-        //modelBuilder.Entity<Book>().HasData(books);
 
     }
 }

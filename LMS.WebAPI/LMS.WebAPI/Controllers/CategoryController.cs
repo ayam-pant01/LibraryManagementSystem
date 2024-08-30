@@ -42,37 +42,44 @@ namespace LMS.WebAPI.Controllers
 
         // POST api/<CategoryController>
         [HttpPost]
-        public async Task<ActionResult<CategoryDto>> CreateCategoryAsync([FromBody] CategoryDto value)
+        public async Task<IActionResult> CreateCategoryAsync([FromBody] CategoryDto value)
         {
+            try
+            {
+                var newCategory = _mapper.Map<Category>(value);
+                await _categoryRepository.AddCategoryAsync(newCategory);
+                await _categoryRepository.SaveChangesAsync();
+                var createdCategory = _mapper.Map<CategoryDto>(newCategory);
+                return Ok(new { message = $"Category created successfully." });
 
-            var newCategory = _mapper.Map<Category>(value);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while creating the category. Please try again later." });
 
-            await _categoryRepository.AddCategoryAsync(newCategory);
-            await _categoryRepository.SaveChangesAsync();
-
-            var createdCategory = _mapper.Map<CategoryDto>(newCategory);
-
-            return CreatedAtRoute("GetCategoryByIdAsync",
-                new
-                {
-                    id = createdCategory.CategoryId
-                },
-                createdCategory);
+            }
         }
 
         // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCategoryAsync(int id, [FromBody] CategoryDto value)
+        public async Task<IActionResult> UpdateCategoryAsync(int id, [FromBody] CategoryDto value)
         {
-            var categoryEntity = await _categoryRepository.GetCategoryByIdAsync(value.CategoryId);
-            if (categoryEntity == null)
+            try
             {
-                return NotFound(new { message = $"Category with the id {id} was not found." });
+                var categoryEntity = await _categoryRepository.GetCategoryByIdAsync(value.CategoryId);
+                if (categoryEntity == null)
+                {
+                    return NotFound(new { message = $"Category with the id {id} was not found." });
+                }
+                _mapper.Map(value, categoryEntity);
+                await _categoryRepository.SaveChangesAsync();
+                return Ok(new { message = $"Category updated successfully." });
             }
-            _mapper.Map(value, categoryEntity);
-            await _categoryRepository.SaveChangesAsync();
-            return NoContent();
-        }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "An error occurred while updating the category. Please try again later." });
+            }
 
+        }
     }
 }
