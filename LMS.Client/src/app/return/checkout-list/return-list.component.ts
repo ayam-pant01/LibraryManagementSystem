@@ -12,6 +12,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { ToastService } from '../../services/toast.service';
+import { CheckoutService } from '../../services/checkout.service';
 
 @Component({
   selector: 'app-return-list',
@@ -23,6 +24,7 @@ import { ToastService } from '../../services/toast.service';
 export class ReturnListComponent implements OnInit{
 searchString: string = "";
 returnService = inject(ReturnService);
+checkoutService = inject(CheckoutService);
 toastService = inject(ToastService);
 pagination?: PaginationMetaData;
 returns: CheckoutResponse[] = [];
@@ -39,7 +41,7 @@ trackByCheckoutId(index: number, checkout: CheckoutResponse): number {
 }
 
 loadReturnLists(pageNumber: number = 1, pageSize: number = 10): void {
-  this.returnService.getUserCheckouts(this.searchString, pageNumber, pageSize).subscribe({
+  this.checkoutService.getAllUserCheckouts(this.searchString, pageNumber, pageSize).subscribe({
     next: (response) => {
       this.returns = response.checkouts;
       this.pagination = response.pagination;
@@ -50,7 +52,7 @@ loadReturnLists(pageNumber: number = 1, pageSize: number = 10): void {
 
 getCheckOutDetail(checkoutId:number){
   this.returnDetails.data = [];
-  this.returnService.getCheckoutDetails(checkoutId).subscribe({
+  this.checkoutService.getCheckoutDetails(checkoutId).subscribe({
     next: (response) => {
       this.returnDetails.data = response;
     },

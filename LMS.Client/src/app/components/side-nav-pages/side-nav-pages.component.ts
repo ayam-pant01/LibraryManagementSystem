@@ -54,8 +54,8 @@ export class SideNavPagesComponent {
           ]
         },
         { value: "All Books", link: 'books' },
-        { value: "All Orders", link: 'login' },
-        { value: "User List", link: 'register' },
+        // { value: "All Orders", link: 'login' },
+        // { value: "User List", link: 'register' },
         {
           value: "Return Management",
           link: '',

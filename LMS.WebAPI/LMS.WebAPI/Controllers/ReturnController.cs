@@ -24,24 +24,6 @@ namespace LMS.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("user-checkouts")]
-        public async Task<ActionResult<IEnumerable<CheckoutDto>>> GetUserCheckouts(string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
-        {
-            var (checkouts, paginationMetaData) = await _returnRepository.GetUsersWithCheckedOutBooksAsync(name, pageNumber, pageSize);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
-            var checkoutDtos = _mapper.Map<IEnumerable<CheckoutDto>>(checkouts);
-
-            return Ok(checkoutDtos);
-        }
-
-        [HttpGet("checkout-details/{checkoutId}")]
-        public async Task<ActionResult<CheckoutDetailDto>> GetCheckoutDetails(int checkoutId)
-        {
-            var checkoutDetails = await _returnRepository.GetCheckoutDetailsByCheckoutIdAsync(checkoutId);
-            var checkoutDetailDtos = _mapper.Map<IEnumerable<CheckoutDetailDto>>(checkoutDetails);
-            return Ok(checkoutDetailDtos);
-        }
-
         [HttpPut("return-book/{checkoutDetailId}")]
         public async Task<IActionResult> ReturnBook(int checkoutDetailId)
         {

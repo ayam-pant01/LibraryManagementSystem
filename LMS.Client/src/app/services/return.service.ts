@@ -14,30 +14,6 @@ export class ReturnService {
 
   constructor(private http: HttpClient) {}
 
-  getUserCheckouts(name?: string, pageNumber: number = 1, pageSize: number = 10): Observable<{checkouts: CheckoutResponse[], pagination: PaginationMetaData}> {
-    const url = `${this.returnApiUrl}/user-checkouts`;
-    let params = new HttpParams();
-    if (name) params = params.append('name', name);
-    params = params.append('pageNumber', pageNumber.toString());
-    params = params.append('pageSize', pageSize.toString());
-
-    return this.http.get<CheckoutResponse[]>(url, { params, observe: 'response' })
-    .pipe(
-      map((response) => { 
-          const pagination = JSON.parse(response.headers.get('X-Pagination')!) as PaginationMetaData;
-          const checkouts = response.body ?? [];
-          return { checkouts, pagination };
-      }),
-      catchError(this.handleError)
-    );
-  }
-
-  getCheckoutDetails(checkoutId:number) : Observable<CheckoutDetailResponse[]>{
-    const url = `${this.returnApiUrl}/checkout-details/${checkoutId}`;
-    return this.http.get<CheckoutDetailResponse[]>(url).pipe(
-      catchError(this.handleError)
-    );
-  }
 
   returnBook(checkoutDetailId:number): Observable<any>{
     const url = `${this.returnApiUrl}/return-book/${checkoutDetailId}`;

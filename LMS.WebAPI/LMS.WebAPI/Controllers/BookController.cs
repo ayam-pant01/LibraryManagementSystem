@@ -74,8 +74,6 @@ namespace LMS.WebAPI.Controllers
                 await _bookRepository.AddBookAsync(newBook);
                 await _bookRepository.SaveChangesAsync();
 
-                var createdBook = _mapper.Map<BookDto>(newBook);
-
                 return Ok(new { message = $"Book created successfully." });
 
             }

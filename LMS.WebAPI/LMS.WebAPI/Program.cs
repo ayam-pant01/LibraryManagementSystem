@@ -25,6 +25,7 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
 builder.Services.AddScoped<IReturnRepository, ReturnRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 // added for seeding data on app startup
 builder.Services.AddScoped<DataSeeder>();
 

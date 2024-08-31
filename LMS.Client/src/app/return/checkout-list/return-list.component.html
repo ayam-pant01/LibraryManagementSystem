@@ -12,6 +12,12 @@
     </mat-card-content>
 </mat-card>
 <mat-accordion>
+  <div class="flex flex-col w-full p-4 shadow rounded">
+    <div class="flex font-bold p-2 border-b">
+      <div class="flex-1 text-left">User Name</div>
+      <div class="flex-1 text-left">Detail</div>
+    </div>
+  </div>
     <ng-container *ngFor="let checkout of returns; trackBy: trackByCheckoutId">
         <mat-expansion-panel #panel (opened)="getCheckOutDetail(checkout.checkoutId)"> 
           <mat-expansion-panel-header>

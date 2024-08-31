@@ -12,16 +12,16 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           
-          <div class="flex flex-col w-full p-4 bg-white shadow rounded">
+          <div class="flex flex-col w-full p-4 rounded">
             <!-- Header Row -->
-            <div class="flex font-bold p-2 bg-gray-100 border-b border-gray-300">
+            <div class="flex font-bold p-2 border-b ">
               <div class="flex-1 text-center">Book Title</div>
               <div class="flex-1 text-center">Returned</div>
               <div class="flex-1 text-center">Returned Date</div>
             </div>
             
             <!-- Data Rows -->
-            <div *ngFor="let detail of checkout.checkoutDetails" class="flex p-2 border-b border-gray-200">
+            <div *ngFor="let detail of checkout.checkoutDetails" class="flex p-2 border-b">
               <div class="flex-1 text-center">{{ detail.bookTitle }}</div>
               <div class="flex-1 text-center">{{ detail.isReturned ? 'Yes' : 'No' }}</div>
               <div class="flex-1 text-center">{{ detail.returnedDate ? (detail.returnedDate | date) : 'N/A' }}</div>

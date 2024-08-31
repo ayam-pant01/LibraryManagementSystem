@@ -49,13 +49,22 @@ public class LMSDBContext : IdentityDbContext<AppUser>
             .HasOne(cd=>cd.Checkout)
             .WithMany(c=>c.CheckoutDetails)
             .HasForeignKey(cd=>cd.CheckoutId);
-        //    .OnDelete(DeleteBehavior.Cascade); // look into on delete behavior
 
         modelBuilder.Entity<CheckoutDetail>()
            .HasOne(cd => cd.Book)
            .WithMany(b => b.CheckoutDetails)
            .HasForeignKey(cd => cd.BookId);
-        //   .OnDelete(DeleteBehavior.Restrict); // look into on delete behavior
+
+        // lookinto cases for delete of data - Delete behavior - restrict/cascade
+
+        //adding index to bookid and returnedDate of CheckoutDetail - got an idea to add index while checking the book is returned.
+        modelBuilder.Entity<CheckoutDetail>()
+            .HasIndex(cd => new { cd.BookId, cd.ReturnedDate });
+
+        //adding an unique constraint for review of book on bookid and user id
+        modelBuilder.Entity<Review>()
+            .HasIndex(r => new { r.BookId, r.UserId })
+            .IsUnique();
 
 
     }

@@ -14,6 +14,7 @@ export interface UserCheckoutResponse {
 }
 
 export interface CheckoutDetailResponse{
+    bookId:number
     checkoutDetailId: number
     bookTitle: string
     isReturned: boolean
