@@ -1,0 +1,48 @@
+<div class="flex items-center justify-between mb-4 pl-4 pr-4">
+  <h2 mat-dialog-title class="flex-1">{{ isNewReview ? 'Add a Review' : 'Your Review' }}</h2>
+</div>
+
+<mat-dialog-content [class]="'p-2 flex flex-col'">
+  <div class="flex flex-col">
+    <div *ngIf="review && !isAddEditMode; else addEditReviewForm">
+      <div class="mb-4">
+        <strong>Your Rating:</strong>
+        <div class="flex justify-between">
+          <app-star-rating [rating]="review.rating"></app-star-rating>
+          <button mat-icon-button color="primary" (click)="editReview()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="mb-4">
+        <strong>Your Comment:</strong>
+        <p>{{ review.comment }}</p>
+      </div>
+      <div class="mb-4">
+        <strong>Reviewed On:</strong>
+        <p>{{ review.reviewDate | date }}</p>
+      </div>
+    </div>
+
+    <ng-template #addEditReviewForm>
+      <div class="mb-4">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Rating</mat-label>
+          <input matInput type="number" min="1" max="5" [(ngModel)]="rating" placeholder="Rate between 1 and 5">
+        </mat-form-field>
+      </div>
+
+      <div class="mb-4">
+        <mat-form-field appearance="fill" class="w-full">
+          <mat-label>Comment</mat-label>
+          <textarea matInput [(ngModel)]="comment" placeholder="Enter your review here"></textarea>
+        </mat-form-field>
+      </div>
+
+      <mat-dialog-actions>
+        <button mat-button (click)="onClose()">Cancel</button>
+        <button mat-button color="primary" (click)="onSave()">{{ review ? 'Update Review' : 'Add Review' }}</button>
+      </mat-dialog-actions>
+    </ng-template>
+  </div>
+</mat-dialog-content>

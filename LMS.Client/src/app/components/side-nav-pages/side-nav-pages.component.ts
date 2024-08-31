@@ -40,8 +40,8 @@ export class SideNavPagesComponent {
     if (role != "Librarian") {
       this.navItems = [
         { value: "View Books", link: 'books' },
-        { value: "My checkout list", link: 'user-checkouts' },
         { value: "Cart", link: 'cart' },
+        { value: "My checkout list", link: 'user-checkouts' },
       ];
     } else {
       this.navItems = [
