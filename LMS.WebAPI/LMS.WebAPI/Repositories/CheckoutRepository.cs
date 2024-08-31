@@ -1,6 +1,7 @@
 ﻿using LMS.WebAPI.DBContexts;
 using LMS.WebAPI.Entities;
 using LMS.WebAPI.Interfaces;
+using LMS.WebAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.WebAPI.Repositories
@@ -13,6 +14,15 @@ namespace LMS.WebAPI.Repositories
         {
             _lmsDbContext = lmsDbContext;
             _bookRepository = bookRepository;
+        }
+
+        public async Task<IEnumerable<Checkout>> GetUserCheckoutListAsync(string userId)
+        {
+            var checkoutCollection = _lmsDbContext.Checkouts
+                .Include(c => c.CheckoutDetails)
+                .Include(x => x.User) as IQueryable<Checkout>;
+            var collectionToReturn = await checkoutCollection.Where(c=>c.UserId == userId).OrderBy(b => b.CheckoutDate).ToListAsync();
+            return collectionToReturn;
         }
 
         public async Task CheckoutBooksAsync(string userId, List<int> bookIds)

@@ -1,7 +1,6 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
 using LMS.WebAPI.Interfaces;
 using LMS.WebAPI.Models;
-using LMS.WebAPI.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -11,12 +10,29 @@ namespace LMS.WebAPI.Controllers
     [Authorize(Roles = "Customer")]
     [Route("api/[controller]")]
     [ApiController]
-    public class CheckoutContoller : ControllerBase
+    public class  CheckoutController : ControllerBase
     {
         private readonly ICheckoutRepository _checkoutRepository;
-        public CheckoutContoller(ICheckoutRepository checkoutRepository)
+        public readonly IMapper _mapper;
+        public CheckoutController(ICheckoutRepository checkoutRepository, IMapper mapper)
         {
             _checkoutRepository = checkoutRepository;
+            _mapper = mapper;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserCheckoutDto>>> GetUserCheckouts()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var checkouts = await _checkoutRepository.GetUserCheckoutListAsync(userId);
+            var checkoutDtos = _mapper.Map<IEnumerable<UserCheckoutDto>>(checkouts);
+
+            return Ok(checkoutDtos);
         }
 
         // POST api/<CheckoutContoller>

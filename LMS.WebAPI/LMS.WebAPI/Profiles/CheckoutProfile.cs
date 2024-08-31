@@ -15,6 +15,8 @@ namespace LMS.WebAPI.Profiles
             CreateMap<CheckoutDetail, CheckoutDetailDto>()
                 .ForMember(dest => dest.BookTitle, opt => opt.MapFrom(src => src.Book.Title))
                 .ForMember(dest => dest.IsReturned, opt => opt.MapFrom(src => src.ReturnedDate != null));
+            CreateMap<Checkout, UserCheckoutDto>()
+              .ForMember(dest => dest.NumberOfBooks, opt => opt.MapFrom(src => src.CheckoutDetails.Count));
         }
     }
 }
