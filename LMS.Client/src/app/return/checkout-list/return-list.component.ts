@@ -14,34 +14,34 @@ import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dial
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-  selector: 'app-checkout-list',
+  selector: 'app-return-list',
   standalone: true,
   imports: [FormsModule,MatButton,MatIconModule,MatInputModule,MatCardModule,MatExpansionModule,DatePipe,CommonModule,MatTableModule,MatDialogModule],
-  templateUrl: './checkout-list.component.html',
-  styleUrl: './checkout-list.component.css'
+  templateUrl: './return-list.component.html',
+  styleUrl: './return-list.component.css'
 })
-export class CheckoutListComponent implements OnInit{
+export class ReturnListComponent implements OnInit{
 searchString: string = "";
 returnService = inject(ReturnService);
 toastService = inject(ToastService);
 pagination?: PaginationMetaData;
-checkouts: CheckoutResponse[] = [];
-checkoutDetails = new MatTableDataSource<CheckoutDetailResponse>();
+returns: CheckoutResponse[] = [];
+returnDetails = new MatTableDataSource<CheckoutDetailResponse>();
 displayedColumns: string[] = ['title','isReturned','returnedDate','actions'];
 @ViewChild('confirmDialog') confirmDialog!: TemplateRef<any>;
 dialogRef!: MatDialogRef<any>;
 constructor(private dialog: MatDialog) {}
 ngOnInit(): void {
-  this.loadCheckouts();
+  this.loadReturnLists();
 }
 trackByCheckoutId(index: number, checkout: CheckoutResponse): number {
   return checkout.checkoutId;
 }
 
-loadCheckouts(pageNumber: number = 1, pageSize: number = 10): void {
+loadReturnLists(pageNumber: number = 1, pageSize: number = 10): void {
   this.returnService.getUserCheckouts(this.searchString, pageNumber, pageSize).subscribe({
     next: (response) => {
-      this.checkouts = response.checkouts;
+      this.returns = response.checkouts;
       this.pagination = response.pagination;
     },
     error: (error) => this.toastService.openSnackBar(error)
@@ -49,10 +49,10 @@ loadCheckouts(pageNumber: number = 1, pageSize: number = 10): void {
 }
 
 getCheckOutDetail(checkoutId:number){
-  this.checkoutDetails.data = [];
+  this.returnDetails.data = [];
   this.returnService.getCheckoutDetails(checkoutId).subscribe({
     next: (response) => {
-      this.checkoutDetails.data = response;
+      this.returnDetails.data = response;
     },
     error: (error) => this.toastService.openSnackBar(error)
   })
@@ -64,7 +64,7 @@ confirmReturn(checkoutDetailId: number,panel: MatExpansionPanel): void {
     if (result) {
       this.returnService.returnBook(checkoutDetailId).subscribe({
         next:(response)=>{
-          this.loadCheckouts();
+          this.loadReturnLists();
           this.toastService.openSnackBar(response.message); 
           panel.close();
         },

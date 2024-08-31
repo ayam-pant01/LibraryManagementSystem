@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { MatSidenav } from '@angular/material/sidenav';
 import { ToastService } from '../../services/toast.service';
+import { UserDetail } from '../../interfaces/user-detail';
 
 @Component({
   selector: 'app-navbar',
@@ -27,16 +28,18 @@ toastService = inject(ToastService)
 router = inject(Router);
 userName: string = 'test';
 userRole: string = 'eta';
-userDetail : any = null;
+userDetail : UserDetail | null = null;
 isLoggedIn : boolean = false;
 
 constructor() {
-  this.authService.userLoggedIn$.subscribe({
-    next:(status)=>{
-      if(status){
-        this.userDetail = this.authService.getUserDetail();
+  this.authService.userDetail$.subscribe({
+    next:(detail)=>{
+      if(detail){
+        this.userDetail = detail;
+        this.isLoggedIn = true;
+      }else{
+        this.isLoggedIn = false
       }
-      this.isLoggedIn = status;
     }
   })
   }
@@ -44,7 +47,6 @@ constructor() {
 logout=()=>{
   this.authService.logout();
   this.toastService.openSnackBar("Logout Success");
-  // this.authService.userLoggedIn.next(false);
   this.router.navigate(['/'])
 }  
 }

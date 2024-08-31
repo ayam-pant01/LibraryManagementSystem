@@ -6,6 +6,13 @@ export interface CheckoutResponse {
     numberOfBooks :  number  
 }
 
+export interface UserCheckoutResponse {
+    checkoutDate :  Date  
+    dueDate :  Date  
+    numberOfBooks :  number  
+    checkoutDetails : CheckoutDetailResponse[]
+}
+
 export interface CheckoutDetailResponse{
     checkoutDetailId: number
     bookTitle: string

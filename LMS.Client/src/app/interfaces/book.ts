@@ -16,8 +16,7 @@ export interface Book {
     category: Category; 
     isAvailable: boolean; 
     averageRating:number;
-    // checkouts: Checkout[]; // Collection of associated checkouts
-    reviews?: Review[]; // Uncomment if you later add reviews
+    reviews?: Review[]; 
   }
 
   export interface BookForCreateAndUpdateDto {

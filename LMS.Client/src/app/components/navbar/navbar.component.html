@@ -4,7 +4,7 @@
       </button>
       <a routerLink="/">LMS</a>
       <span class="spacer"></span>
-    <ng-container *ngIf="isLoggedIn; else notLoggedIn">
+    <ng-container *ngIf="isLoggedIn && userDetail; else notLoggedIn">
       <div class="flex items-center">
         <a mat-icon-button [matMenuTriggerFor]="userMenu" class="flex items-center ml-2">
           <div class="bg-red-400 text-white font-bold shadow-md rounded-full w-5 h-5 p-5 flex justify-center items-center">
@@ -12,7 +12,7 @@
           </div>
           <div class="flex flex-col">
             <span class="font-bold">{{ userDetail.firstName }}</span>
-            <span class="text-sm ">{{ userDetail.roles }}</span>
+            <span class="text-sm ">{{ userDetail.role }}</span>
           </div>
         </a>
         <mat-menu #userMenu="matMenu">

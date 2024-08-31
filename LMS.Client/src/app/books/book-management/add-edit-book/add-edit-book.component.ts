@@ -70,7 +70,6 @@ export class AddEditBookComponent implements OnInit {
           this.dialogRef.close(true);  
         },
         error: (error) => {
-          console.error("Creation failed", error);
           this.toastService.openSnackBar(error); 
         }
       });
