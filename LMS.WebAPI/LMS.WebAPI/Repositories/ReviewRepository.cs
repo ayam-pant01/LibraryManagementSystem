@@ -32,9 +32,9 @@ namespace LMS.WebAPI.Repositories
             return await _lmsDbContect.Reviews.AnyAsync(r => r.BookId == bookId && r.UserId == userId);
         }
 
-        public Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return (await _lmsDbContect.SaveChangesAsync() >= 0);
         }
     }
 }

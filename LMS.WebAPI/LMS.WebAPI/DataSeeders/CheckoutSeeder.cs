@@ -12,9 +12,9 @@ namespace LMS.WebAPI.DataSeeders
             List<Book> books)
         {
             var checkouts = new List<Checkout>();
-            var userBooks = books.OrderBy(b => _faker.Random.Number()).ToList(); // Shuffle books to avoid repetition
+            var availableBooks = books.OrderBy(b => _faker.Random.Number()).ToList(); 
 
-            int userCheckouts = _faker.Random.Number(3, 5); // Random number of checkouts per user
+            int userCheckouts = _faker.Random.Number(3, 5); 
 
 
             for (int i = 0; i < userCheckouts; i++)
@@ -27,8 +27,8 @@ namespace LMS.WebAPI.DataSeeders
                 var checkoutDetails = new List<CheckoutDetail>();
                 checkouts.Add(checkout);
                 int numberOfBooks = _faker.Random.Number(1, 3);
-                var checkoutBooks = userBooks.Take(numberOfBooks).ToList();
-                userBooks = userBooks.Except(checkoutBooks).ToList(); // Remove used books to avoid repetition
+                var checkoutBooks = availableBooks.Take(numberOfBooks).ToList();
+                availableBooks = availableBooks.Except(checkoutBooks).ToList(); 
 
                 foreach (var book in checkoutBooks)
                 {

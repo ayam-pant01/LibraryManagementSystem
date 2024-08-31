@@ -16,12 +16,10 @@ namespace LMS.WebAPI.Controllers
     public class CheckoutController : ControllerBase
     {
         private readonly ICheckoutRepository _checkoutRepository;
-        private readonly IReviewRepository _reviewRepository;
         public readonly IMapper _mapper;
-        public CheckoutController(ICheckoutRepository checkoutRepository, IMapper mapper, IReviewRepository reviewRepository)
+        public CheckoutController(ICheckoutRepository checkoutRepository, IMapper mapper)
         {
             _checkoutRepository = checkoutRepository;
-            _reviewRepository = reviewRepository;
             _mapper = mapper;
         }
 
@@ -89,58 +87,6 @@ namespace LMS.WebAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = ex.Message });
-            }
-        }
-
-
-        [Authorize(Roles = "Customer")]
-        [HttpGet("user-book")]
-        public async Task<ActionResult<ReviewDto>> GetUserReview()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (userId == null)
-            {
-                return Unauthorized();
-            }
-            var checkouts = await _checkoutRepository.GetUserCheckoutListAsync(userId);
-            var checkoutDtos = _mapper.Map<IEnumerable<UserCheckoutDto>>(checkouts);
-
-            return Ok(checkoutDtos);
-        }
-
-
-        [Authorize(Roles = "Customer")]
-        [HttpPost("review-book")]
-        public async Task<IActionResult> ReviewBook([FromBody] ReviewForCreateAndUpdateDto reviewDto)
-        {
-            try
-            {
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                if (userId == null)
-                {
-                    return Unauthorized();
-                }
-
-                if (await _reviewRepository.CheckReviewExists(reviewDto.BookId, userId))
-                {
-                    return Conflict(new { message = $"A review selected book already exists. Cannot enter multiple." });
-                }
-
-                var newReview = _mapper.Map<Review>(reviewDto);
-
-                await _reviewRepository.AddReviewAsync(newReview);
-                await _reviewRepository.SaveChangesAsync();
-
-                return Ok(new { message = $"New review added successfully." });
-
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(new { message = "An error occurred while add the book review. Please try again later." });
             }
         }
     }

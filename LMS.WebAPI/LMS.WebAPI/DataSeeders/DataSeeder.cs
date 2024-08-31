@@ -12,6 +12,7 @@ namespace LMS.WebAPI.DataSeeders
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly LMSDBContext _context;
+        private static readonly Faker _faker = new Faker();
 
         public DataSeeder(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, LMSDBContext context)
         {
@@ -27,6 +28,7 @@ namespace LMS.WebAPI.DataSeeders
             await SeedCategoriesAsync();
             await SeedBooksAsync();
             await SeedCheckoutAsync();
+            await SeedReturnAsync();
         }
 
         private async Task SeedRolesAsync()
@@ -120,27 +122,16 @@ namespace LMS.WebAPI.DataSeeders
             if (!_context.Checkouts.Any())
             {
                 var books = _context.Books.Where(b => b.IsAvailable).ToList();
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == "librarian@lms.com");
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == "customer@lms.com");
                 if (user != null)
                 {
                     var checkouts = CheckoutSeeder.GenerateCheckouts(user, books);
 
                     await _context.Checkouts.AddRangeAsync(checkouts);
                     await _context.SaveChangesAsync();
-                    foreach (var checkout in checkouts)
-                    {
-                        foreach (var details in checkout.CheckoutDetails)
-                        {
-                           details.CheckoutId = checkout.CheckoutId;
-                           details.CheckoutDetailId = 0;
-                        }
-                    }
+
 
                     var allCheckoutDetails = checkouts.SelectMany(c => c.CheckoutDetails).ToList();
-
-                    await _context.CheckoutDetails.AddRangeAsync(allCheckoutDetails);
-
-                    await _context.SaveChangesAsync();
 
 
                     var bookIds = allCheckoutDetails.Select(cd => cd.BookId).Distinct().ToList();
@@ -150,9 +141,47 @@ namespace LMS.WebAPI.DataSeeders
                     {
                         book.IsAvailable = false;
                     }
-
                     _context.Books.UpdateRange(books);
                     await _context.SaveChangesAsync();
+                }
+            }
+        }
+
+        private async Task SeedReturnAsync()
+        {
+            if (_context.CheckoutDetails.Any())
+            {
+                var checkoutList = _context.CheckoutDetails.Where(b => b.ReturnedDate == null).ToList();
+                int numberOfBooksReturned = _faker.Random.Number(1, checkoutList.Count - 1);
+
+                var randomCheckouts = checkoutList
+                   .OrderBy(x => _faker.Random.Number()) 
+                   .Take(numberOfBooksReturned)
+                   .ToList();
+
+                foreach (var checkout in randomCheckouts)
+                {
+                    checkout.ReturnedDate = DateTime.UtcNow;
+
+                    var book = await _context.Books
+                        .FirstOrDefaultAsync(b => b.BookId == checkout.BookId);
+
+                    if (book != null)
+                    {
+                        book.IsAvailable = true;
+                    }
+                }
+                await _context.SaveChangesAsync();
+                var booksReturned = randomCheckouts.Select(x => x.BookId).ToList();
+                if (booksReturned.Any())
+                {
+                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == "customer@lms.com");
+                    if(user != null)
+                    { 
+                        var reviewList = ReviewSeeder.GenerateReviews(booksReturned, user.Id);
+                        await _context.Reviews.AddRangeAsync(reviewList);
+                        await _context.SaveChangesAsync();
+                    }
                 }
             }
         }
