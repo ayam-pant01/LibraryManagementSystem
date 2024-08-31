@@ -20,6 +20,7 @@ namespace LMS.WebAPI.Repositories
         {
             var checkoutCollection = _lmsDbContext.Checkouts
                 .Include(c => c.CheckoutDetails)
+                .ThenInclude(c=>c.Book)
                 .Include(x => x.User) as IQueryable<Checkout>;
             var collectionToReturn = await checkoutCollection.Where(c=>c.UserId == userId).OrderBy(b => b.CheckoutDate).ToListAsync();
             return collectionToReturn;
