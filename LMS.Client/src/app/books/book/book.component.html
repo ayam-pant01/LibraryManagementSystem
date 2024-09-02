@@ -1,15 +1,37 @@
-<mat-form-field appearance="fill">
-    <mat-label>Search Books</mat-label>
-    <input matInput [(ngModel)]="searchQuery" 
-    (ngModelChange)="applySearchQuery()" placeholder="Enter book title">
-</mat-form-field>
-<mat-card *ngIf="pagination">
-    <mat-card-content>
-        Showing results for {{pagination.TotalItemCount}} books.
-    </mat-card-content>
-</mat-card>
+<div class="container mx-auto">
+    
+  <div class="flex space-x-4 mb-4">
+    <div class="flex-1"> <label class="block text-sm font-medium ">Search ...</label>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applySearchQuery()"
+        placeholder="Search title or author or publisher or description"
+        class="mt-1 block w-full px-3 py-2 border  rounded-md shadow-sm sm:text-sm"
+      />
+    </div>
 
-<div class="flex flex-wrap justify-around gap-4 p-4">
-    <app-book-card   *ngFor="let book of books" [book]="book"  (bookClick)="openBookDetailDialog($event)"></app-book-card>
+    <div class="flex-1">
+      <label class="block text-sm font-medium ">Filter by Availability</label>
+      <select
+      [(ngModel)]="selectedAvailability"
+      (ngModelChange)="applyAvailabilityFilter($event)"
+        class="mt-1 block w-full px-3 py-2 border  rounded-md shadow-sm sm:text-sm"
+      >
+        <option [value]="">All</option>
+        <option [value]="true">Available</option>
+        <option [value]="false">Not Available</option>
+      </select>
+    </div>
   </div>
-  
+
+    <div class="flex flex-wrap justify-around gap-4 p-4">
+        <app-book-card   *ngFor="let book of books" [book]="book"  (bookClick)="openBookDetailDialog($event)"></app-book-card>
+    </div>
+    <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[10, 20, 50]"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+  ></mat-paginator>
+</div> 

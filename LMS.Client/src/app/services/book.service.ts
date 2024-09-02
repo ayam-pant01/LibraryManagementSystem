@@ -47,6 +47,12 @@ export class BookService {
     );
   }
 
+  getFeaturedBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.bookApiUrl}/featured-books`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getBookById(id: number): Observable<Book> {
     return this.http.get<Book>(`${this.bookApiUrl}/${id}`).pipe(
       catchError(this.handleError)

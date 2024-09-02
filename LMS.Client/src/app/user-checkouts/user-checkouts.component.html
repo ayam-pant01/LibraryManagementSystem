@@ -1,41 +1,39 @@
-<div *ngIf="userCheckouts.length > 0" class="p-4 bg-gray-50">
-    <h1 class="text-xl font-semibold mb-4">
-      You have checked out {{ totalCheckouts }} books all together
-    </h1>
-    
-    <mat-accordion>
-      <ng-container *ngFor="let checkout of userCheckouts">
-        <mat-expansion-panel #panel class="mb-2">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Checked out {{ checkout.numberOfBooks }} books on {{ checkout.checkoutDate | date }}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-          <div class="flex flex-col w-full p-4 rounded">
-            <!-- Header Row -->
-            <div class="flex font-bold p-2 border-b ">
-              <div class="flex-1 text-center">Book Title</div>
-              <div class="flex-1 text-center">Returned</div>
-              <div class="flex-1 text-center">Returned Date</div>
-              <div class="flex-1 text-center">Action</div>
-            </div>
-            
-            <!-- Data Rows -->
-            <div *ngFor="let detail of checkout.checkoutDetails" class="flex p-2 border-b">
-              <div class="flex-1 text-center">{{ detail.bookTitle }}</div>
-              <div class="flex-1 text-center">{{ detail.isReturned ? 'Yes' : 'No' }}</div>
-              <div class="flex-1 text-center">{{ detail.returnedDate ? (detail.returnedDate | date) : 'N/A' }} </div>
-              <div class="flex-1 text-center">
-               <button *ngIf="detail.isReturned" mat-icon-button color="primary" (click)="openReviewDialog(detail.bookId)" >
-                <mat-icon matTooltip="Review book">reviews</mat-icon>
-               </button>
-              </div>
-             
-            </div>
+<div *ngIf="userCheckouts.length > 0" class="container mx-auto p-4 bg-gray-50">
+  <h1 class="text-xl font-semibold mb-4">
+    You have checked out {{ totalCheckouts }} books all together
+  </h1>
+
+  <mat-accordion>
+    <ng-container *ngFor="let checkout of userCheckouts">
+      <mat-expansion-panel #panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Checked out {{ checkout.numberOfBooks }} books on {{ checkout.checkoutDate | date }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="flex flex-col w-full p-4 rounded">
+          <div class="flex font-bold p-2 border-b ">
+            <div class="flex-1 text-center">Book Title</div>
+            <div class="flex-1 text-center">Returned</div>
+            <div class="flex-1 text-center">Returned Date</div>
+            <div class="flex-1 text-center">Action</div>
           </div>
-        </mat-expansion-panel>
-      </ng-container>
-    </mat-accordion>
-  </div>
-  
+
+          <div *ngFor="let detail of checkout.checkoutDetails" class="flex p-2 border-b">
+            <div class="flex-1 text-center">{{ detail.bookTitle }}</div>
+            <div class="flex-1 text-center">{{ detail.isReturned ? 'Yes' : 'No' }}</div>
+            <div class="flex-1 text-center">{{ detail.returnedDate ? (detail.returnedDate | date) : 'N/A' }} </div>
+            <div class="flex-1 text-center">
+              <button *ngIf="detail.isReturned" mat-icon-button color="primary"
+                (click)="openReviewDialog(detail.bookId)">
+                <mat-icon matTooltip="Review book">reviews</mat-icon>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
+  </mat-accordion>
+</div>

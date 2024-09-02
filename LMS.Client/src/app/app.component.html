@@ -1,9 +1,11 @@
 <mat-sidenav-container>
-  <mat-sidenav #sidenav closed mode="side">
+  <mat-sidenav #sidenav closed mode="over">
     <app-side-nav-pages></app-side-nav-pages>
   </mat-sidenav>
   <mat-sidenav-content>
-    <app-navbar [sidenav]="sidenav"></app-navbar>
+    <div class="container mx-auto">
+      <app-navbar [sidenav]="sidenav"></app-navbar>
+    </div>
     <main>
       <router-outlet />
     </main>

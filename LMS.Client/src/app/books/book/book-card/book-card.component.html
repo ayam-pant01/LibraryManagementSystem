@@ -1,9 +1,8 @@
-<mat-card (click)="onBookClick()" class="flex flex-col items-center p-4 m-4 w-36 border border-red-700 rounded-lg shadow-lg">
-    <img mat-card-image [src]="book.coverImage" [alt]="book.title" class="w-full h-auto rounded-md mb-4" />
-    <mat-card-content>
-      <h3 class="text-lg font-semibold mb-2 text-center">{{ book.title }}</h3>
-      <app-star-rating *ngIf="book.averageRating > 0" [rating]="book.averageRating"></app-star-rating>
-      <p class="text-sm text-gray-600 text-center">by {{ book.author }}</p>
-    </mat-card-content>
-  </mat-card>
-  
+<mat-card (click)="onBookClick()" class="flex flex-col items-center w-40 border border-red-700 rounded-lg shadow-lg">
+  <img mat-card-image [src]="book.coverImage" [alt]="book.title" class="w-full h-50 rounded-md mb-4" />
+  <mat-card-content>
+    <p class="text-sm font-semibold mb-2">{{ book.title }}</p>
+    <app-star-rating *ngIf="book.averageRating > 0" [rating]="book.averageRating"></app-star-rating>
+    <p class="text-xs text-gray-600">- {{ book.author }}</p>
+  </mat-card-content>
+</mat-card>

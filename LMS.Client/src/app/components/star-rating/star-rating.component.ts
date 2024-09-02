@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './star-rating.component.css'
 })
 export class StarRatingComponent {
-  @Input() rating: number = 0; // Default rating is 0
+  @Input() rating: number = 0; 
 
   get fullStars(): number[] {
     return [].constructor(Math.floor(this.rating));

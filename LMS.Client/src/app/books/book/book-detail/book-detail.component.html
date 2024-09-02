@@ -1,7 +1,7 @@
 
 <div class="flex items-center justify-between mb-4 pl-4 pr-4">
   <h1 mat-dialog-title class="flex-1">{{ data.book.title }}</h1>
-  @if(authService.getUserDetail()){
+  @if(authService.getUserDetail() && authService.getUserDetail()?.role == "Customer"){
     <button mat-icon-button color="primary" (click)="addBookToCart()" [ngClass]="{'disabled': !data.book.isAvailable}">
       <mat-icon matTooltip="{{ data.book.isAvailable ? 'Add to Cart' : 'Unavailable' }}">{{ data.book.isAvailable ? 'shopping_cart' : 'do_not_disturb' }}</mat-icon>
     </button>

@@ -63,8 +63,15 @@ namespace LMS.WebAPI.Controllers
         [HttpGet("featured-books")]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetFeaturedBooks()
         {
-            var booklist = await _bookRepository.GetFeaturedBooks();
-            return Ok(_mapper.Map<BookDto>(booklist));
+            var featuredBookEntities = await _bookRepository.GetFeaturedBooks();
+            var bookDtos = featuredBookEntities.Select(book =>
+            {
+                var bookDto = _mapper.Map<BookDto>(book);
+                bookDto.AverageRating = book.Reviews.Any() ? book.Reviews.Average(r => r.Rating) : 0;
+                return bookDto;
+            }).ToList();
+
+            return Ok(bookDtos);
         }
 
         // POST api/<BookController>

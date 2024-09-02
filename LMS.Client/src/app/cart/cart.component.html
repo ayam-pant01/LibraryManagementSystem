@@ -1,56 +1,56 @@
-<mat-card>
-    <mat-card-header class="justify-between items-center p-2" *ngIf="cartItems.size > 0">
-        <mat-card-title class="p-2">My Cart</mat-card-title>
+<mat-card class="container mx-auto mt-4">
+  <mat-card-header class="justify-between items-center p-2" *ngIf="cartItems.size > 0">
+    <mat-card-title class="p-2">My Cart</mat-card-title>
+    <div class="p-2">
+      <button mat-icon-button color="primary" (click)="clearCart()">
+        <mat-icon matTooltip="Clear cart item">clear</mat-icon>
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <div *ngIf="cartItems.size > 0; else emptyCart">
+      <div class="flex flex-row m-4 border rounded-lg shadow-lg" *ngFor="let item of cartItems">
+        <img [src]="item.coverImage" alt="{{ item.title }}" class="w-48 h-48 object-cover rounded-lg mr-4">
+        <div class="flex-grow">
+          <h2 class="line-clamp-1">{{ item.title }}</h2>
+          <p><strong>Author:</strong> {{ item.author }}</p>
+          <p><strong>Publisher:</strong> {{ item.publisher }}</p>
+          <p><strong>Publication Date:</strong> {{ item.publicationDate | date:'fullDate' }}</p>
+        </div>
+        <button mat-icon-button color="primary" (click)="removeBook(item)">
+          <mat-icon matTooltip="Remove from cart">delete</mat-icon>
+        </button>
+      </div>
+      <mat-card-actions class="justify-between">
+        <h3 class="p-2">Total Books: {{ totalBooks }}</h3>
         <div class="p-2">
-            <button mat-icon-button  color="primary" (click)="clearCart()" >
-              <mat-icon matTooltip="Clear cart item">clear</mat-icon>
-            </button>
+          <button class="p-2" mat-flat-button color="secondary" (click)="checkout()">Checkout</button>
         </div>
-    </mat-card-header>
-    <mat-card-content>
-        <div *ngIf="cartItems.size > 0; else emptyCart">
-        <div class="flex flex-row m-4 border rounded-lg shadow-lg" *ngFor="let item of cartItems">
-            <img [src]="item.coverImage" alt="{{ item.title }}" class="w-48 h-48 object-cover rounded-lg mr-4">
-            <div class="flex-grow">
-              <h2 class="line-clamp-1">{{ item.title }}</h2>
-              <p><strong>Author:</strong> {{ item.author }}</p>
-              <p><strong>Publisher:</strong> {{ item.publisher }}</p>
-              <p><strong>Publication Date:</strong> {{ item.publicationDate | date:'fullDate' }}</p>
-            </div>
-            <button mat-icon-button color="primary" (click)="removeBook(item)">
-                <mat-icon matTooltip="Remove from cart">delete</mat-icon>
-            </button>
-          </div>
-            <mat-card-actions class="justify-between">
-                <h3 class="p-2">Total Books: {{ totalBooks }}</h3>
-                <div class="p-2">
-                <button class="p-2" mat-flat-button color="secondary" (click)="checkout()">Checkout</button>
-                </div>
-            </mat-card-actions>
-        </div>
-        <ng-template #emptyCart>
-            <div class="text-center p-4">
-              <h1>Your cart is empty</h1>
-              <p>
-                It looks like you haven't added any books to your cart yet.
-                <a mat-button color="primary" routerLink="/books">Browse Books</a> to find something you like.
-              </p>
-            </div>
-          </ng-template>
-          <div class="text-center text-sm text-gray-500 mt-4">
-            <p><strong>Note:</strong> Your cart is not saved to the database and will be cleared on each session.</p>
-          </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-actions>
+    </div>
+    <ng-template #emptyCart>
+      <div class="text-center p-4">
+        <h1>Your cart is empty</h1>
+        <p>
+          It looks like you haven't added any books to your cart yet.
+          <a mat-button color="primary" routerLink="/books">Browse Books</a> to find something you like.
+        </p>
+      </div>
+    </ng-template>
+    <div class="text-center text-sm text-gray-500 mt-4">
+      <p><strong>Note:</strong> Your cart is not saved to the database and will be cleared on each session.</p>
+    </div>
+  </mat-card-content>
+</mat-card>
 <ng-template #confirmCheckoutDialog>
-    <mat-dialog-content [class]="'p-4 flex flex-col'">
-        <h1 mat-dialog-title>Confirm Checkout</h1>
-        <div mat-dialog-content>
-          <p>Do you want to confirm the checkout of all the books in the cart?</p>
-        </div>
-        <div mat-dialog-actions>
-          <button mat-button (click)="dialogRef.close(false)">No</button>
-          <button mat-button color="primary" (click)="dialogRef.close(true)">Yes</button>
-        </div>
-    </mat-dialog-content>
-  </ng-template>
+  <mat-dialog-content [class]="'p-4 flex flex-col'">
+    <h1 mat-dialog-title>Confirm Checkout</h1>
+    <div mat-dialog-content>
+      <p>Do you want to confirm the checkout of all the books in the cart?</p>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-button (click)="dialogRef.close(false)">No</button>
+      <button mat-button color="primary" (click)="dialogRef.close(true)">Yes</button>
+    </div>
+  </mat-dialog-content>
+</ng-template>

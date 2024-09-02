@@ -23,12 +23,15 @@ namespace LMS.WebAPI.DataSeeders
 
         public async Task SeedAsync()
         {
-            await SeedRolesAsync();
-            await SeedUsersAsync();
-            await SeedCategoriesAsync();
-            await SeedBooksAsync();
-            await SeedCheckoutAsync();
-            await SeedReturnAsync();
+            if (!_context.Books.Any())
+            {
+                await SeedRolesAsync();
+                await SeedUsersAsync();
+                await SeedCategoriesAsync();
+                await SeedBooksAsync();
+                await SeedCheckoutAsync();
+                await SeedReturnAsync();
+            }
         }
 
         private async Task SeedRolesAsync()
@@ -106,8 +109,6 @@ namespace LMS.WebAPI.DataSeeders
 
         private async Task SeedBooksAsync()
         {
-            if (!_context.Books.Any())
-            {
                 var categoryList = await _context.Categories.Select(x => x.CategoryId).Distinct().ToListAsync();
                 if (categoryList.Any())
                 {
@@ -115,7 +116,6 @@ namespace LMS.WebAPI.DataSeeders
                     await _context.Books.AddRangeAsync(bookList);
                     await _context.SaveChangesAsync();
                 }
-            }
         }
         private async Task SeedCheckoutAsync()
         {
