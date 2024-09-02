@@ -15,16 +15,15 @@ Together, these two projects form a complete Learning Management System for mana
 - [Technologies Used](#technologies-used)
 - [Features](#features)
 - [LMS.Client (Frontend)](#lmsclient-frontend)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Running the Application](#running-the-application)
-  - [Configuration](#configuration)
+  - [Prerequisites](#lmsclient-prerequisites)
+  - [Installation](#lmsclient-installation)
+  - [Running the Application](#lmsclient-running-the-application)
+  - [Configuration](#lmsclient-configuration)
 - [LMS.WebAPI (Backend)](#lmswebapi-backend)
-  - [Prerequisites](#prerequisites-1)
-  - [Configure DB Connection](#configure-1)
-  - [Installation](#installation-1)
-  - [Running the Application](#running-the-application-1)
-
+  - [Prerequisites](#lmswebapi-prerequisites)
+  - [Configure DB Connection](#lmswebapi-configure-db-connection)
+  - [Installation](#lmswebapi-installation)
+  - [Running the Application](#lmswebapi-running-the-application)
 ---
 
 ## Overview
@@ -81,7 +80,7 @@ This project replicates the functionality of a local library system with the fol
 
 This is the Angular-based frontend for the Learning Management System.
 
-### Prerequisites
+### LMS Client Prerequisites
 
 Before running the LMS.Client project, ensure that you have the following installed:
 
@@ -94,7 +93,7 @@ To install Angular CLI globally:
 npm install -g @angular/cli
 ```
 
-### Installation
+### LMS Client Installation
 
 Clone the repository and navigate to the LMS.Client directory:
 
@@ -109,7 +108,7 @@ Install the required dependencies:
 npm install
 ```
 
-### Running the Application
+### LMS Client Running the Application
 
 To run the Angular development server locally:
 
@@ -123,7 +122,7 @@ This will start the Angular development server, and the application can be acces
 http://localhost:4200/
 ```
 
-### Configuration
+### LMS Client Configuration
 
 The API URL and other environment-specific settings can be configured in the src/environments/environment.ts file.
 
@@ -141,14 +140,14 @@ export const environment = {
 
 This is the backend of the Learning Management System, built using .NET Core Web API.
 
-### Prerequisites-1
+### LMS Web Prerequisites
 
 Before running the LMS.WebAPI project, ensure that you have the following installed:
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (or later)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (SQL Server Express or any other version)
 
-### Configure-1
+### Configure DB Connection
 
 Update the Connection String: Open the appsettings.json file and update the connection string to point to your SQL Server instance. Here is an example configuration for SQL Server Express:
 
@@ -164,7 +163,7 @@ Update the Connection String: Open the appsettings.json file and update the conn
 - Ensure the Database name matches the database you want to use (you may need to create this database if it doesn’t already exist).
 Verify SQL Server is Running: Make sure your SQL Server instance is running and accessible.
 
-### installation-1
+### LMS WebAPI Installation
 
 Restore Dependencies
 Navigate to the LMS.WebAPI directory and restore the necessary NuGet packages:
@@ -188,7 +187,7 @@ Update the Database: Apply the migrations to the database with:
 dotnet ef database update
 ```
 
-### running-the-application-1
+### LMS WebAPI Running the Application
 
 To run the application locally, use the following command:
 
@@ -198,25 +197,4 @@ dotnet run
 
 This will start the development server. By default, it will be accessible at https://localhost:7049/. You can change the port by modifying the launchSettings.json file located in the Properties directory of your project.
 
-Build
-To build the project, use the following command:
-
-```bash
-dotnet build
-```
-
-The build artifacts will be stored in the bin/ directory.
-
-Configuration
-AppSettings: Configuration settings for the application are found in the appsettings.json file. Update connection strings, API keys, and other settings as needed.
-
-
-Additional Notes
-Database Migrations: If you have Entity Framework Core migrations, you can apply them using:
-
-bash
-Copy code
-dotnet ef database update
-Swagger UI: Swagger UI is configured for API documentation. It can be accessed at http://localhost:5000/swagger when the application is running.
-
-Seeding Data: Data seeding can be handled using Bogus. Ensure your application’s startup logic includes data seeding if necessary.
+Seeding Data: Data seeding is being handeled using Bogus. Application’s startup logic includes data seeding. It seeds data if the table is empty.
