@@ -18,15 +18,12 @@ Together, these two projects form a complete Learning Management System for mana
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Running the Application](#running-the-application)
-  - [Build](#build)
-  - [Testing](#testing)
   - [Configuration](#configuration)
 - [LMS.WebAPI (Backend)](#lmswebapi-backend)
   - [Prerequisites](#prerequisites-1)
+  - [Configure DB Connection](#configure-1)
   - [Installation](#installation-1)
   - [Running the Application](#running-the-application-1)
-  - [Testing](#testing-1)
-- [License](#license)
 
 ---
 
@@ -44,9 +41,10 @@ This repository includes both the frontend and backend implementations:
 ## Technologies Used
 
 - **Frontend**: Angular, Angular Material, RxJS, Tailwind CSS
-- **Backend**: .NET Core Web API, Entity Framework Core
-- **Database**: SQL Server (or any database supported by EF Core)
+- **Backend**: .NET Core 8, ASP.NET Core Web API, Entity Framework Core, AutoMapper, Swagger UI
+- **Database**: SQL Server 
 - **Authentication**: JWT-based authentication
+- **Data Generation** : Data Generation: Bogus for .NET
 
 ---
 
@@ -94,53 +92,131 @@ To install Angular CLI globally:
 
 ```bash
 npm install -g @angular/cli
+```
 
+### Installation
 
-Installation
 Clone the repository and navigate to the LMS.Client directory:
 
+```bash
 git clone https://github.com/ayam-pant01/LibraryManagementSystem.git
 cd LMS.Client
+```
 
 Install the required dependencies:
-bash
-Copy code
+
+```bash
 npm install
-Running the Application
+```
+
+### Running the Application
+
 To run the Angular development server locally:
 
-bash
-Copy code
+```bash
 npm start
+```
+
 This will start the Angular development server, and the application can be accessed at:
 
-arduino
-Copy code
+```bash
 http://localhost:4200/
-Build
-To build the project for production:
+```
 
-bash
-Copy code
-npm run build
-The build artifacts will be stored in the dist/ directory.
+### Configuration
 
-Testing
-To run the unit tests:
-
-bash
-Copy code
-npm test
-This will execute the unit tests using Karma and Jasmine.
-
-Configuration
 The API URL and other environment-specific settings can be configured in the src/environments/environment.ts file.
 
 Example:
 
-typescript
+```bash
 Copy code
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000/api' // Backend API endpoint
+  apiUrl: 'https://localhost:7049/api' // Backend API endpoint
 };
+```
+
+## LMS.WebAPI (Backend)
+
+This is the backend of the Learning Management System, built using .NET Core Web API.
+
+### Prerequisites-1
+
+Before running the LMS.WebAPI project, ensure that you have the following installed:
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (or later)
+- [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (SQL Server Express or any other version)
+
+### Configure-1
+
+Update the Connection String: Open the appsettings.json file and update the connection string to point to your SQL Server instance. Here is an example configuration for SQL Server Express:
+
+```bash
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=LMS;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
+```
+
+- Replace localhost\\SQLEXPRESS with your SQL Server instance name.
+- Ensure the Database name matches the database you want to use (you may need to create this database if it doesn’t already exist).
+Verify SQL Server is Running: Make sure your SQL Server instance is running and accessible.
+
+### installation-1
+
+Restore Dependencies
+Navigate to the LMS.WebAPI directory and restore the necessary NuGet packages:
+
+```bash
+dotnet restore
+```
+
+Applying Migrations
+If you are using Entity Framework Core migrations, apply them to set up the database schema:
+
+Add Migrations: If you haven’t already added migrations, use the following command:
+
+```bash
+dotnet ef migrations add InitialCreate
+```
+
+Update the Database: Apply the migrations to the database with:
+
+```bash
+dotnet ef database update
+```
+
+### running-the-application-1
+
+To run the application locally, use the following command:
+
+```bash
+dotnet run
+```
+
+This will start the development server. By default, it will be accessible at https://localhost:7049/. You can change the port by modifying the launchSettings.json file located in the Properties directory of your project.
+
+Build
+To build the project, use the following command:
+
+```bash
+dotnet build
+```
+
+The build artifacts will be stored in the bin/ directory.
+
+Configuration
+AppSettings: Configuration settings for the application are found in the appsettings.json file. Update connection strings, API keys, and other settings as needed.
+
+
+Additional Notes
+Database Migrations: If you have Entity Framework Core migrations, you can apply them using:
+
+bash
+Copy code
+dotnet ef database update
+Swagger UI: Swagger UI is configured for API documentation. It can be accessed at http://localhost:5000/swagger when the application is running.
+
+Seeding Data: Data seeding can be handled using Bogus. Ensure your application’s startup logic includes data seeding if necessary.
