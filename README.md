@@ -94,3 +94,53 @@ To install Angular CLI globally:
 
 ```bash
 npm install -g @angular/cli
+
+
+Installation
+Clone the repository and navigate to the LMS.Client directory:
+
+git clone https://github.com/ayam-pant01/LibraryManagementSystem.git
+cd LMS.Client
+
+Install the required dependencies:
+bash
+Copy code
+npm install
+Running the Application
+To run the Angular development server locally:
+
+bash
+Copy code
+npm start
+This will start the Angular development server, and the application can be accessed at:
+
+arduino
+Copy code
+http://localhost:4200/
+Build
+To build the project for production:
+
+bash
+Copy code
+npm run build
+The build artifacts will be stored in the dist/ directory.
+
+Testing
+To run the unit tests:
+
+bash
+Copy code
+npm test
+This will execute the unit tests using Karma and Jasmine.
+
+Configuration
+The API URL and other environment-specific settings can be configured in the src/environments/environment.ts file.
+
+Example:
+
+typescript
+Copy code
+export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:5000/api' // Backend API endpoint
+};
