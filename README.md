@@ -24,6 +24,7 @@ Together, these two projects form a complete Learning Management System for mana
   - [Configure DB Connection](#lmswebapi-configure-db-connection)
   - [Installation](#lmswebapi-installation)
   - [Running the Application](#lmswebapi-running-the-application)
+  
 ---
 
 ## Overview
@@ -69,11 +70,6 @@ This project replicates the functionality of a local library system with the fol
    - Customers can search for books by a partial title match.
    - Customers can view detailed information about a book, including Title, Author, Description, Cover Image, Publisher, Publication Date, Category, ISBN, and Page Count.
 
-5. **Bonus Features (Optional)**
-   - A component library is used on the frontend to enhance UI/UX.
-   - Swagger UI / OpenAPI documentation is configured for the API.
-   - Unit tests for the API are implemented.
-   - The database is seeded with data using Bogus for .NET.
 ---
 
 ## LMS.Client (Frontend)
