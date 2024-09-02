@@ -14,12 +14,27 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-  getBooks(title?: string, searchQuery?: string, pageNumber: number = 1, pageSize: number = 10): Observable<{books: Book[], pagination: PaginationMetaData}> {
-    let params = new HttpParams();
-    if (title) params = params.append('title', title);
-    if (searchQuery) params = params.append('searchQuery', searchQuery);
-    params = params.append('pageNumber', pageNumber.toString());
-    params = params.append('pageSize', pageSize.toString());
+  getBooks(
+    searchQuery?: string,
+     isAvailable?:boolean | null,
+     sortBy:string = 'Title',
+     isDescending:boolean = false,
+     pageNumber: number = 1,
+     pageSize: number = 10
+    ): Observable<{books: Book[], pagination: PaginationMetaData}> {
+      let params = new HttpParams()
+      .append('pageNumber', pageNumber.toString())
+      .append('pageSize', pageSize.toString())
+      .append('sortBy', sortBy)
+      .append('isDescending', isDescending.toString());
+  
+    if (searchQuery) {
+      params = params.append('searchQuery', searchQuery);
+    }
+  
+    if (isAvailable !== null && isAvailable !== undefined) {
+        params = params.append('isAvailable', isAvailable.toString());
+    }
 
     return this.http.get<Book[]>(this.bookApiUrl, { params, observe: 'response' })
     .pipe(

@@ -1,13 +1,11 @@
 <mat-form-field appearance="fill">
     <mat-label>Search Books</mat-label>
-    <input matInput [(ngModel)]="searchString" placeholder="Enter book title">
-    <button (click)="loadBooks()" mat-icon-button matSuffix>
-        <mat-icon>search</mat-icon>
-    </button>
+    <input matInput [(ngModel)]="searchQuery" 
+    (ngModelChange)="applySearchQuery()" placeholder="Enter book title">
 </mat-form-field>
-<mat-card>
+<mat-card *ngIf="pagination">
     <mat-card-content>
-        Showing results for 100 books.
+        Showing results for {{pagination.TotalItemCount}} books.
     </mat-card-content>
 </mat-card>
 

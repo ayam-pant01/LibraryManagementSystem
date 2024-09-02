@@ -35,19 +35,12 @@ namespace LMS.WebAPI.Repositories
                     .ToListAsync();
         }
 
-        public async Task<(IEnumerable<Book>, PaginationMetaData)> GetAllBooksAsync(string? title, string? searchQuery, int pageNumber, int pageSize)
+        public async Task<(IEnumerable<Book>, PaginationMetaData)> GetAllBooksAsync(string? searchQuery, bool? isAvailable, string sortBy = "Title", bool isDecending = false, int pageNumber = 1, int pageSize = 10)
         {
             var bookCollection = _lmsDbContext.Books
                 .Include(b => b.Category)
                 .Include(b => b.Reviews)
                     .ThenInclude(r => r.User) as IQueryable<Book>;
-
-            if (!string.IsNullOrWhiteSpace(title))
-            {
-                title = title.Trim();
-                bookCollection = bookCollection.Where(b => b.Title == title);
-
-            }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
@@ -58,6 +51,19 @@ namespace LMS.WebAPI.Repositories
                     || (b.Author != null && b.Author.Contains(searchQuery)));
 
             }
+            if (isAvailable.HasValue)
+            {
+                bookCollection = bookCollection.Where(b => b.IsAvailable == isAvailable.Value);
+            }
+
+            bookCollection = sortBy.ToLower() switch
+            {
+                "author" => isDecending ? bookCollection.OrderByDescending(b => b.Author) : bookCollection.OrderBy(b => b.Author),
+                "isAvailable" => isDecending ? bookCollection.OrderByDescending(b => b.IsAvailable) : bookCollection.OrderBy(b => b.IsAvailable),
+                "categoryName" => isDecending ? bookCollection.OrderByDescending(b => b.Category.Name) : bookCollection.OrderBy(b => b.Category.Name),
+                _ => isDecending ? bookCollection.OrderByDescending(b => b.Category.Name) : bookCollection.OrderBy(b => b.Category.Name),
+
+            };
 
             var totalItemCount = await bookCollection.CountAsync();
             var paginationMetaData = new PaginationMetaData(totalItemCount, pageSize, pageNumber);
@@ -67,6 +73,11 @@ namespace LMS.WebAPI.Repositories
                 .Take(pageSize)
                 .ToListAsync();
             return (collectionToReturn, paginationMetaData);
+        }
+
+        public async Task<IEnumerable<Book>> GetFeaturedBooks()
+        {
+            return await _lmsDbContext.Books.OrderBy(b => Guid.NewGuid()).Take(6).ToListAsync();
         }
 
         public async Task<bool> CheckBookExistsAsync(int bookId)

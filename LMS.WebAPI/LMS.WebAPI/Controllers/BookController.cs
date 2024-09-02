@@ -27,11 +27,12 @@ namespace LMS.WebAPI.Controllers
         }
 
         // GET: api/<BookController>
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooksAsync(string? title, string? searchQuery, int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooksAsync(string? searchQuery, bool? isAvailable, string sortBy = "Title", bool isDecending = false, int pageNumber = 1, int pageSize = 10)
         {
-            var (bookEntities, paginationMetaData) = await _bookRepository.GetAllBooksAsync(title, searchQuery, pageNumber, pageSize);
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
+            var (bookEntities, paginationMetaData) = await _bookRepository.GetAllBooksAsync(searchQuery,isAvailable,sortBy,isDecending, pageNumber, pageSize);
+            Response.Headers.Append("X-Pagination", JsonSerializer.Serialize(paginationMetaData));
             var bookDtos = bookEntities.Select(book =>
                             {
                                 var bookDto = _mapper.Map<BookDto>(book);
@@ -55,6 +56,15 @@ namespace LMS.WebAPI.Controllers
             var bookDto = _mapper.Map<BookDto>(book);
             bookDto.AverageRating = bookDto.Reviews.Any() ? bookDto.Reviews.Average(r => r.Rating) : 0;
             return Ok(bookDto);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet("featured-books")]
+        public async Task<ActionResult<IEnumerable<BookDto>>> GetFeaturedBooks()
+        {
+            var booklist = await _bookRepository.GetFeaturedBooks();
+            return Ok(_mapper.Map<BookDto>(booklist));
         }
 
         // POST api/<BookController>

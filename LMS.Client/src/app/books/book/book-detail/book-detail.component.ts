@@ -9,6 +9,7 @@ import { StarRatingComponent } from '../../../components/star-rating/star-rating
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToastService } from '../../../services/toast.service';
 import { CartService } from '../../../services/cart.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -22,6 +23,7 @@ export class BookDetailComponent {
   data = inject(MAT_DIALOG_DATA) as { book: Book };
   toastService = inject(ToastService);
   private cartService = inject(CartService);
+  authService = inject(AuthService);
   
   onClose(): void {
     this.dialogRef.close();

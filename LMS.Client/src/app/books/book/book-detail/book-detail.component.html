@@ -1,9 +1,11 @@
 
 <div class="flex items-center justify-between mb-4 pl-4 pr-4">
   <h1 mat-dialog-title class="flex-1">{{ data.book.title }}</h1>
-  <button mat-icon-button color="primary" (click)="addBookToCart()" [ngClass]="{'disabled': !data.book.isAvailable}">
-    <mat-icon matTooltip="{{ data.book.isAvailable ? 'Add to Cart' : 'Unavailable' }}">{{ data.book.isAvailable ? 'shopping_cart' : 'do_not_disturb' }}</mat-icon>
-  </button>
+  @if(authService.getUserDetail()){
+    <button mat-icon-button color="primary" (click)="addBookToCart()" [ngClass]="{'disabled': !data.book.isAvailable}">
+      <mat-icon matTooltip="{{ data.book.isAvailable ? 'Add to Cart' : 'Unavailable' }}">{{ data.book.isAvailable ? 'shopping_cart' : 'do_not_disturb' }}</mat-icon>
+    </button>
+  }
 </div>
 
 <mat-dialog-content [class]="'p-2 flex flex-col'">

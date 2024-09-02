@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { ToastService } from '../../services/toast.service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-book',
@@ -23,18 +24,31 @@ import { ToastService } from '../../services/toast.service';
 export class BookComponent implements OnInit {
   bookService = inject(BookService)
   books: Book[] = [];
-  pagination?: PaginationMetaData;
+  pagination: PaginationMetaData | null = null;
   booksToDisplay: BooksByCatergory[] = [];
-  searchString: string = "";
+  private searchString = new Subject<string>();
+  searchQuery: string = '';
+  selectedAvailability: boolean | null = null;
   dialog = inject(MatDialog);
   toastService = inject(ToastService)
 
   ngOnInit(): void {
+    this.searchString.pipe(
+      debounceTime(350),
+      distinctUntilChanged()
+    ).subscribe(query=>{
+      this.loadBooks();
+    })
     this.loadBooks();
   }
+  
+  applySearchQuery(): void {
+    this.searchString.next(this.searchQuery)
+  }
 
-  loadBooks(pageNumber: number = 1, pageSize: number = 10): void {
-    this.bookService.getBooks("", this.searchString, pageNumber, pageSize).subscribe({
+  loadBooks(sortField: string = 'title', sortDirection: string = 'asc',pageNumber: number = 1, pageSize: number = 10): void {
+    const isDescending = sortDirection === 'desc';
+    this.bookService.getBooks(this.searchQuery,this.selectedAvailability, sortField,isDescending,pageNumber, pageSize).subscribe({
       next: (response) => {
         this.books = response.books;
         this.pagination = response.pagination;

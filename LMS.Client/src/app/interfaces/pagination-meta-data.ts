@@ -1,6 +1,6 @@
 export interface PaginationMetaData {
-  totalCount: number;
-  pageSize: number;
-  currentPage: number;
-  totalPages: number;
+  TotalItemCount: number;
+  PageSize: number;
+  CurrentPage: number;
+  TotalPageCount: number;
 }

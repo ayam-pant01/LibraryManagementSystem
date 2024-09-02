@@ -117,6 +117,7 @@ app.UseCors(options =>
     options.AllowAnyHeader();
     options.AllowAnyMethod();
     options.AllowAnyOrigin();
+    options.WithExposedHeaders("X-Pagination");
 });
 
 app.UseAuthentication();

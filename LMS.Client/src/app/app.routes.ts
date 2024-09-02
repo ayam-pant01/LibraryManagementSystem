@@ -9,6 +9,8 @@ import { ReturnListComponent } from './return/checkout-list/return-list.componen
 import { categoryResolver } from './resolvers/category.resolver';
 import { CartComponent } from './cart/cart.component';
 import { UserCheckoutsComponent } from './user-checkouts/user-checkouts.component';
+import { LibrarianGuard } from './guards/librarian.guard';
+import { CustomerGuard } from './guards/customer.guard';
 
 export const routes: Routes = [
     {
@@ -21,21 +23,21 @@ export const routes: Routes = [
         path:"register",component:RegisterComponent
     },
     {
-        path:"categories",component:CategoryComponent
+        path:"categories",component:CategoryComponent,canActivate:[LibrarianGuard]
     },
     {
         path:"books",component:BookComponent
     },
     {
-        path:"cart",component:CartComponent
+        path:"cart",component:CartComponent,canActivate:[CustomerGuard]
     },
     {
-        path:"user-checkouts",component:UserCheckoutsComponent
+        path:"user-checkouts",component:UserCheckoutsComponent,canActivate:[CustomerGuard]
     },
     {
-        path:"manage-books",component:BookManagementComponent,resolve:{ categories: categoryResolver}
+        path:"manage-books",component:BookManagementComponent,resolve:{ categories: categoryResolver},canActivate:[LibrarianGuard]
     },
     {
-        path:"return-list",component:ReturnListComponent
+        path:"return-list",component:ReturnListComponent,canActivate:[LibrarianGuard]
     }
 ];
