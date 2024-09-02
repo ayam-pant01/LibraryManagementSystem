@@ -15,15 +15,15 @@ Together, these two projects form a complete Learning Management System for mana
 - [Technologies Used](#technologies-used)
 - [Features](#features)
 - [LMS.Client (Frontend)](#lmsclient-frontend)
-  - [Prerequisites](#lmsclient-prerequisites)
-  - [Installation](#lmsclient-installation)
-  - [Running the Application](#lmsclient-running-the-application)
-  - [Configuration](#lmsclient-configuration)
+  - [LMS Client Prerequisites](#lms-client-prerequisites)
+  - [LMS Client Installation](#lms-client-installation)
+  - [LMS Client Running the app](#lms-client-running-the-app)
+  - [LMS Client Configure app](#lms-client-configure-app)
 - [LMS.WebAPI (Backend)](#lmswebapi-backend)
-  - [Prerequisites](#lmswebapi-prerequisites)
-  - [Configure DB Connection](#lmswebapi-configure-db-connection)
-  - [Installation](#lmswebapi-installation)
-  - [Running the Application](#lmswebapi-running-the-application)
+  - [LMS Webapi Prerequisites](#lms-webapi-prerequisites)
+  - [LMS Webapi Configuring DB](#lms-webapi-configuring-db)
+  - [LMS Webapi App Installation](#lms-webapi-app-installation)
+  - [LMS Webapi starting the app](#lms-web-api-starting-the-app)
   
 ---
 
@@ -104,7 +104,7 @@ Install the required dependencies:
 npm install
 ```
 
-### LMS Client Running the Application
+### LMS Client Running the app
 
 To run the Angular development server locally:
 
@@ -118,14 +118,13 @@ This will start the Angular development server, and the application can be acces
 http://localhost:4200/
 ```
 
-### LMS Client Configuration
+### LMS Client Configure app
 
 The API URL and other environment-specific settings can be configured in the src/environments/environment.ts file.
 
 Example:
 
 ```bash
-Copy code
 export const environment = {
   production: false,
   apiUrl: 'https://localhost:7049/api' // Backend API endpoint
@@ -136,14 +135,14 @@ export const environment = {
 
 This is the backend of the Learning Management System, built using .NET Core Web API.
 
-### LMS Web Prerequisites
+### LMS Webapi Prerequisites
 
 Before running the LMS.WebAPI project, ensure that you have the following installed:
 
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (or later)
 - [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (SQL Server Express or any other version)
 
-### Configure DB Connection
+### LMS Webapi Configuring DB
 
 Update the Connection String: Open the appsettings.json file and update the connection string to point to your SQL Server instance. Here is an example configuration for SQL Server Express:
 
@@ -159,10 +158,13 @@ Update the Connection String: Open the appsettings.json file and update the conn
 - Ensure the Database name matches the database you want to use (you may need to create this database if it doesn’t already exist).
 Verify SQL Server is Running: Make sure your SQL Server instance is running and accessible.
 
-### LMS WebAPI Installation
+### LMS Webapi App Installation
 
 Restore Dependencies
-Navigate to the LMS.WebAPI directory and restore the necessary NuGet packages:
+
+
+Navigate to the LMS.WebAPI directory.
+Ensure that you are in the root directory of your .NET project, where the .csproj file is located and restore the necessary NuGet packages:
 
 ```bash
 dotnet restore
@@ -171,10 +173,10 @@ dotnet restore
 Applying Migrations
 If you are using Entity Framework Core migrations, apply them to set up the database schema:
 
-Add Migrations: If you haven’t already added migrations, use the following command:
+First, make sure you have dotnet -ef installed else run:
 
 ```bash
-dotnet ef migrations add InitialCreate
+dotnet tool install --global dotnet-ef
 ```
 
 Update the Database: Apply the migrations to the database with:
@@ -183,7 +185,7 @@ Update the Database: Apply the migrations to the database with:
 dotnet ef database update
 ```
 
-### LMS WebAPI Running the Application
+### LMS Webapi starting the app
 
 To run the application locally, use the following command:
 
