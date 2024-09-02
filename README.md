@@ -87,7 +87,7 @@ This is the Angular-based frontend for the Learning Management System.
 
 Before running the LMS.Client project, ensure that you have the following installed:
 
-- [Node.js](https://nodejs.org/) (version 16.x or later is recommended)
+- [Node.js](https://nodejs.org/) (version 20.x or later is recommended)
 - [Angular CLI](https://angular.io/cli) (version 18.x or later)
 
 To install Angular CLI globally:
