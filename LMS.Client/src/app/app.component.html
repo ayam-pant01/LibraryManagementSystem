@@ -1,17 +1,13 @@
-<app-navbar></app-navbar>
-<router-outlet />
-<!-- <h1 class="text-9xl">
-  Hello
-</h1>
-
-<h1 class="text-2xl font-extralight underline text-red-600">
-  Hello world
-</h1>
-
-<button mat-button>
-  Click
-</button>
-
-<button mat-raised-button>
-  Click
-</button> -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav closed mode="over">
+    <app-side-nav-pages></app-side-nav-pages>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="container mx-auto">
+      <app-navbar [sidenav]="sidenav"></app-navbar>
+    </div>
+    <main>
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

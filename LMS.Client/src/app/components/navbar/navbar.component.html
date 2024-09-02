@@ -1,34 +1,33 @@
-<div>
-  <mat-toolbar>
+<mat-toolbar color="primary">
+  <button mat-icon-button *ngIf="isLoggedIn" (click)="toggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <a routerLink="/">Library MS</a>
+  <span class="spacer"></span>
+  <ng-container *ngIf="isLoggedIn && userDetail; else notLoggedIn">
     <div class="flex items-center">
-      <button mat-icon-button>
-        <mat-icon>menu</mat-icon>
-      </button>
-      <a routerLink="/">LMS</a>
-    </div>
-    <div class="flex-grow"></div>
-    <ng-container *ngIf="isLoggedIn(); else notLoggedIn">
-      <div class="flex items-center">
-        <a mat-icon-button [matMenuTriggerFor]="userMenu" class="flex items-center ml-2">
-          <div class="bg-red-400 text-white font-bold shadow-md rounded-full w-5 h-5 p-5 flex justify-center items-center">
+      <a mat-icon-button [matMenuTriggerFor]="userMenu" class="flex ml-2">
+        <div class="flex -ml-12">
+          <div
+            class="bg-red-400 text-white font-bold shadow-md rounded-full w-5 h-5 p-5 flex justify-center items-center">
             {{userDetail.firstName[0].toUpperCase()}}
           </div>
-          <div class="flex flex-col">
-            <span class="font-bold">{{ userDetail.firstName }}</span>
-            <span class="text-sm ">{{ userDetail.roles }}</span>
+          <div class="flex flex-col items-start ml-2">
+            <span class="font-bold text-black text-sm">{{ userDetail.firstName }}</span>
+            <span class="text-xs text-black">As {{ userDetail.role }}</span>
           </div>
-        </a>
-        <mat-menu #userMenu="matMenu">
-          <a mat-menu-item><mat-icon>account_circle</mat-icon>View Profile</a>
-          <a mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Logout</a>
-        </mat-menu>
-      </div>
-    </ng-container>
-    <ng-template #notLoggedIn>
-      <div class="flex items-center space-x-4">
-        <a mat-button routerLink="/login">Login</a>
-        <a mat-button routerLink="/register">Register</a>
-      </div>
-    </ng-template>
-  </mat-toolbar>
-</div>
+        </div>
+      </a>
+      <mat-menu #userMenu="matMenu">
+        <a mat-menu-item><mat-icon>account_circle</mat-icon>View Profile</a>
+        <a mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Logout</a>
+      </mat-menu>
+    </div>
+  </ng-container>
+  <ng-template #notLoggedIn>
+    <div class="flex items-center space-x-4">
+      <a mat-button routerLink="/login">Login</a>
+      <a mat-button routerLink="/register">Register</a>
+    </div>
+  </ng-template>
+</mat-toolbar>

@@ -1,0 +1,15 @@
+mat-nav-list {
+  padding-left: 0;
+}
+
+mat-list-item {
+  padding-left: 16px;
+}
+
+mat-nav-list mat-list-item {
+  padding-left: 32px;
+}
+
+.active-link {
+  font-weight: bold;
+}

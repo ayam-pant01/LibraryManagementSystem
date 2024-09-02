@@ -1,5 +1,8 @@
+using LMS.WebAPI.DataSeeders;
 using LMS.WebAPI.DBContexts;
 using LMS.WebAPI.Entities;
+using LMS.WebAPI.Interfaces;
+using LMS.WebAPI.Repositories;
 using LMS.WebAPI.Services.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +20,14 @@ builder.Services.AddDbContext<LMSDBContext>(dbContextOptions
     => dbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("LMSDBConnectionString")));
 // injected jwt provider services
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+// repository services
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICheckoutRepository, CheckoutRepository>();
+builder.Services.AddScoped<IReturnRepository, ReturnRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+// added for seeding data on app startup
+builder.Services.AddScoped<DataSeeder>();
 
 builder.Services.AddIdentityCore<AppUser>()
     .AddRoles<IdentityRole>()
@@ -39,6 +50,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+
+#region AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -73,12 +89,27 @@ builder.Services.AddSwaggerGen(setupAction =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Seed the database
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
 }
+// Configure the HTTP request pipeline.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Library Management API V1");
+//    });
+//}
+
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Library Management API V1");
+});
 
 app.UseHttpsRedirection();
 app.UseCors(options =>
@@ -86,6 +117,7 @@ app.UseCors(options =>
     options.AllowAnyHeader();
     options.AllowAnyMethod();
     options.AllowAnyOrigin();
+    options.WithExposedHeaders("X-Pagination");
 });
 
 app.UseAuthentication();

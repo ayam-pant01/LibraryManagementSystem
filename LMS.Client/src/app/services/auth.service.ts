@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { LoginRequest } from '../interfaces/login-request';
-import { map, Observable, retry } from 'rxjs';
+import { BehaviorSubject, map, Observable, retry, Subject } from 'rxjs';
 import { AuthResponse } from '../interfaces/auth-response';
 import { HttpClient } from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
 import { RegisterRequest } from '../interfaces/register-request';
+import { UserDetail } from '../interfaces/user-detail';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +14,28 @@ import { RegisterRequest } from '../interfaces/register-request';
 export class AuthService {
   apiUrl: string = environment.apiUrl;
   private tokenKey  = 'token';
-  constructor(private http: HttpClient) { }
+
+  private userLoggedInSubject: BehaviorSubject<boolean>;
+  userLoggedIn$: Observable<boolean>;
+
+  private userDetailSubject : BehaviorSubject<UserDetail | null>;
+  userDetail$ : Observable<UserDetail | null>;
+
+  constructor(private http: HttpClient) {
+    this.userLoggedInSubject = new BehaviorSubject<boolean>(this.hasValidToken());
+    this.userLoggedIn$ = this.userLoggedInSubject.asObservable();
+    this.userDetailSubject = new BehaviorSubject<UserDetail | null>(this.getUserDetail());
+    this.userDetail$ = this.userDetailSubject.asObservable();
+   }
+   
   login(data: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/account/login`, data)
     .pipe(
       map((response) => {
         if (response && response.isSuccess) {
-          // Store the token in localStorage
           localStorage.setItem(this.tokenKey, response.token || '');
+          this.userLoggedInSubject.next(true);
+          this.userDetailSubject.next(this.getUserDetail());
         }
         return response;
       })
@@ -31,30 +46,26 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/account/register`, data)
     .pipe(
       map((response) => {
-        if (response && response.isSuccess) {
-          console.log("response",response);
-        }
         return response;
       })
     );
   }
   
-  getUserDetail=()=>{
+  getUserDetail=() : UserDetail | null =>{
     const token = this.getToken();
     if(!token) return null;
     const decodedToken:any = jwtDecode(token);
-    console.log("decodedToekn",decodedToken);
-    const userDetail={
+    const userDetail: UserDetail ={
       id:decodedToken.nameid,
       email:decodedToken.email,
       firstName:decodedToken.given_name,
       lastName:decodedToken.family_name,
-      roles:decodedToken.roles || []
+      role: decodedToken.role
     }
     return userDetail;
   }
 
-  isLoggedIn = ():boolean => {
+  hasValidToken = ():boolean => {
     const token = this.getToken();
     if(!token) return false;
     return !this.isTokenExpired();
@@ -72,9 +83,11 @@ export class AuthService {
 
   logout =():void =>{
     localStorage.removeItem(this.tokenKey);
+    this.userLoggedInSubject.next(false);
+    this.userDetailSubject.next(null);
   }
 
-  private getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
+  getToken = (): string | null => localStorage.getItem(this.tokenKey) || '';
   
 }
 

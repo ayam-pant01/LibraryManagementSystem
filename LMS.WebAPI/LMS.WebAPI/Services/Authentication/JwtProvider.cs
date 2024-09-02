@@ -19,9 +19,8 @@ namespace LMS.WebAPI.Services.Authentication
                     Encoding.UTF8.GetBytes(_config["JwtAuthentication:SecretKey"]!));
         }
 
-        public string GenerateToken(AppUser user)
+        public string GenerateToken(AppUser user, IList<string>? userRoles)
         {
-
             var userClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier,user.Id),
@@ -29,6 +28,10 @@ namespace LMS.WebAPI.Services.Authentication
                 new Claim(ClaimTypes.GivenName,user.FirstName),
                 new Claim(ClaimTypes.Surname,user.LastName)
             };
+            if (userRoles != null && userRoles.Any())
+            {
+                userClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+            }
             var credentials = new SigningCredentials(_jwtKey, SecurityAlgorithms.HmacSha256);
             var tokenDescriptor = new SecurityTokenDescriptor
             {

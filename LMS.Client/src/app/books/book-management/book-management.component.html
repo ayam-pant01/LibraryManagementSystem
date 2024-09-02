@@ -1,0 +1,78 @@
+<div class="container mx-auto">
+  <div class="flex space-x-4 mb-4">
+    <div class="flex-1"> <label class="block text-sm font-medium ">Search ...</label>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applySearchQuery()"
+        placeholder="Search title or author or publisher or description"
+        class="mt-1 block w-full px-3 py-2 border  rounded-md shadow-sm sm:text-sm"
+      />
+    </div>
+
+    <div class="flex-1">
+      <label class="block text-sm font-medium ">Filter by Availability</label>
+      <select
+      [(ngModel)]="selectedAvailability"
+      (ngModelChange)="applyAvailabilityFilter($event)"
+        class="mt-1 block w-full px-3 py-2 border  rounded-md shadow-sm sm:text-sm"
+      >
+        <option [value]="">All</option>
+        <option [value]="true">Available</option>
+        <option [value]="false">Not Available</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <a mat-flat-button (click)="openAddEditBookDialog()"> <mat-icon>add</mat-icon>  <span>Add</span></a>
+  </div>
+
+    <table mat-table [dataSource]="books" class="mat-elevation-z8" matSort>
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+        <td mat-cell *matCellDef="let book"> {{book.title}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="categoryName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+        <td mat-cell *matCellDef="let book"> {{book.categoryName}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="author">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Author </th>
+        <td mat-cell *matCellDef="let book"> {{book.author}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="publisher">
+        <th mat-header-cell *matHeaderCellDef> Publisher </th>
+        <td mat-cell *matCellDef="let book"> {{book.publisher}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="publicationDate">
+        <th mat-header-cell *matHeaderCellDef> Publication Date </th>
+        <td mat-cell *matCellDef="let book"> {{book.publicationDate | date}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="pageCount">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Page Count </th>
+        <td mat-cell *matCellDef="let book"> {{book.pageCount}} </td>
+      </ng-container>
+      <ng-container matColumnDef="isAvailable">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Available </th>
+        <td mat-cell *matCellDef="let book"> {{book.isAvailable ? 'Yes' : 'No'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Actions </th>
+        <td mat-cell *matCellDef="let book">
+          <button mat-icon-button (click)="editBook(book)">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)"></mat-paginator>
+  </div>

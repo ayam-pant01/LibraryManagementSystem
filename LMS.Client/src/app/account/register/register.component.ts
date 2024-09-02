@@ -6,10 +6,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AuthService } from '../../services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -20,11 +20,11 @@ import { CommonModule } from '@angular/common';
 })
 export class RegisterComponent {
   authService = inject(AuthService);
-  matSnackBar = inject(MatSnackBar);
+  toastService = inject(ToastService);
   router = inject(Router);
 
-  hidePassword = true; // This is used to toggle password visibility
-  hideConfirmPassword = true; // This is used to toggle password visibility
+  hidePassword = true;
+  hideConfirmPassword = true;
 
   registerForm: FormGroup;
   fb = inject(FormBuilder);
@@ -32,7 +32,7 @@ export class RegisterComponent {
   constructor() {
     this.registerForm = this.fb.group({
       firstName: ['', Validators.required],
-      middleName: [''], // Optional
+      middleName: [''],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, this.passwordValidator]],
@@ -89,22 +89,15 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.authService.register(this.registerForm.value).subscribe({
         next: () => {
-          this.matSnackBar.open('Registration successful!', 'Close', {
-            duration: 3000,
-          });
+          this.toastService.openSnackBar('Registration successful!');
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          console.log("error",err);
-          this.matSnackBar.open(`Registration failed: ${err}`, 'Close', {
-            duration: 3000,
-          });
+          this.toastService.openSnackBar('Registration failed!');
         },
       });
     } else {
-      this.matSnackBar.open('Please fill in all required fields correctly.', 'Close', {
-        duration: 3000,
-      });
+      this.toastService.openSnackBar('Please fill in all required fields correctly!');
     }
   }
 }

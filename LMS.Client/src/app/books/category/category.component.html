@@ -1,0 +1,53 @@
+
+<div class="container mx-auto px-4">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Category Management</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="flex flex-col space-y-4">
+      <div class="flex mt-4">
+        <mat-form-field appearance="fill" class="mr-2">
+          <mat-label>New Category Name</mat-label>
+          <input matInput [(ngModel)]="newCategoryName" name="categoryName" required>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" (click)="addCategory()">Add Category</button>
+      </div>
+      <div class="w-1/2"> 
+      <table mat-table [dataSource]="categories">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let category">
+            <mat-form-field appearance="fill" *ngIf="category.isEditing">
+              <mat-label>Category Name</mat-label>
+              <input matInput [(ngModel)]="category.name" name="categoryName{{category.categoryId}}">
+            </mat-form-field>
+            <span matLine *ngIf="!category.isEditing" [ngClass]="{'editable': category.isEditing}">
+              {{ category.name }} </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let category">
+            <button mat-icon-button *ngIf="!category.isEditing" (click)="editCategory(category.categoryId)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="category.isEditing" (click)="saveCategory(category.categoryId)">
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="category.isEditing" (click)="cancelEdit(category.categoryId)">
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+    </div>
+    </div>
+    </mat-card-content>
+  </mat-card>
+</div>

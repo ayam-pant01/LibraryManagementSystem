@@ -1,0 +1,58 @@
+
+<div class="flex items-center justify-between mb-4 pl-4 pr-4">
+  <h1 mat-dialog-title class="flex-1">{{ data.book.title }}</h1>
+  @if(authService.getUserDetail() && authService.getUserDetail()?.role == "Customer"){
+    <button mat-icon-button color="primary" (click)="addBookToCart()" [ngClass]="{'disabled': !data.book.isAvailable}">
+      <mat-icon matTooltip="{{ data.book.isAvailable ? 'Add to Cart' : 'Unavailable' }}">{{ data.book.isAvailable ? 'shopping_cart' : 'do_not_disturb' }}</mat-icon>
+    </button>
+  }
+</div>
+
+<mat-dialog-content [class]="'p-2 flex flex-col'">
+  <div class="flex flex-row">
+    <img [src]="data.book.coverImage" alt="{{ data.book.title }}" class="w-48 h-48 object-cover rounded-lg mr-4">
+    <div class="flex-grow">
+      <p class="font-bold">Author:</p>
+      <p>{{ data.book.author }}</p>
+      <p class="font-bold">Publisher:</p>
+      <p>{{ data.book.publisher }}</p>
+      <p class="font-bold">Publication Date:</p>
+      <p>{{ data.book.publicationDate | date:'fullDate' }}</p>
+    </div>
+  </div>
+  <div class="flex">
+    <div class="m-2 flex-1 "><strong>ISBN:</strong> {{ data.book.isbn }}</div>
+    <div class="m-2 flex-1 "><strong>Page Count:</strong> {{ data.book.pageCount }}</div>
+    <div class="m-2 flex-1 "><strong>Category:</strong> {{ data.book.categoryName }}</div>
+  </div>
+  
+  <div class="flex">
+    <div class="m-2 flex-1 "><strong>Description:</strong> {{ data.book.description }}</div>
+  </div>
+  <div class="mt-4 border-t pt-1"> <div>Customer Reviews</div>
+
+    <div *ngIf="data.book.reviews && data.book.reviews.length > 0">
+      <ul>
+        <li *ngFor="let review of data.book.reviews">
+          <div class="flex justify-between">
+            <div class="flex-1">
+              <p class="font-bold">{{ review.reviewerName }}</p>
+            </div>
+            <div class="flex-1 flex items-center">
+              <app-star-rating [rating]="review.rating"></app-star-rating>
+            </div>
+          </div>
+          <p>{{ review.comment }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="data.book.reviews && data.book.reviews.length === 0">
+      <p>No customer reviews available yet.</p>
+    </div>
+  </div>
+  </mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+</mat-dialog-actions>
