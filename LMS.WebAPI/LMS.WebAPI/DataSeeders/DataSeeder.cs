@@ -152,36 +152,40 @@ namespace LMS.WebAPI.DataSeeders
             if (_context.CheckoutDetails.Any())
             {
                 var checkoutList = _context.CheckoutDetails.Where(b => b.ReturnedDate == null).ToList();
-                int numberOfBooksReturned = _faker.Random.Number(1, checkoutList.Count - 1);
-
-                var randomCheckouts = checkoutList
-                   .OrderBy(x => _faker.Random.Number()) 
-                   .Take(numberOfBooksReturned)
-                   .ToList();
-
-                foreach (var checkout in randomCheckouts)
+                if (checkoutList.Any())
                 {
-                    checkout.ReturnedDate = DateTime.UtcNow;
+                    int numberOfBooksReturned = _faker.Random.Number(1, checkoutList.Count);
 
-                    var book = await _context.Books
-                        .FirstOrDefaultAsync(b => b.BookId == checkout.BookId);
+                    var randomCheckouts = checkoutList
+                       .OrderBy(x => _faker.Random.Number())
+                       .Take(numberOfBooksReturned)
+                       .ToList();
 
-                    if (book != null)
+                    foreach (var checkout in randomCheckouts)
                     {
-                        book.IsAvailable = true;
+                        checkout.ReturnedDate = DateTime.UtcNow;
+
+                        var book = await _context.Books
+                            .FirstOrDefaultAsync(b => b.BookId == checkout.BookId);
+
+                        if (book != null)
+                        {
+                            book.IsAvailable = true;
+                        }
                     }
-                }
-                await _context.SaveChangesAsync();
-                var booksReturned = randomCheckouts.Select(x => x.BookId).ToList();
-                if (booksReturned.Any())
-                {
-                    var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == "customer@lms.com");
-                    if(user != null)
-                    { 
-                        var reviewList = ReviewSeeder.GenerateReviews(booksReturned, user.Id);
-                        await _context.Reviews.AddRangeAsync(reviewList);
-                        await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();
+                    var booksReturned = randomCheckouts.Select(x => x.BookId).ToList();
+                    if (booksReturned.Any())
+                    {
+                        var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == "customer@lms.com");
+                        if (user != null)
+                        {
+                            var reviewList = ReviewSeeder.GenerateReviews(booksReturned, user.Id);
+                            await _context.Reviews.AddRangeAsync(reviewList);
+                            await _context.SaveChangesAsync();
+                        }
                     }
+
                 }
             }
         }
