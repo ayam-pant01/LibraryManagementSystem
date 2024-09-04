@@ -24,6 +24,7 @@ Together, these two projects form a complete Learning Management System for mana
   - [LMS Webapi Configuring DB](#lms-webapi-configuring-db)
   - [LMS Webapi App Installation](#lms-webapi-app-installation)
   - [LMS Webapi starting the app](#lms-web-api-starting-the-app)
+- [Default Login Credentials](#default-login-credentials)
   
 ---
 
@@ -62,7 +63,7 @@ This project replicates the functionality of a local library system with the fol
 
 3. **Book Checkout (Customer)**
    - Customers can browse all available books in the library.
-   - Customers can check out books. Only one copy of each book is available.
+   - Customers can check out books. Only one copy of each book is available.W
    - The system automatically tracks the availability of books.
    - Customers can leave reviews for books with a 1-5 star rating.
 
@@ -196,3 +197,15 @@ dotnet run
 This will start the development server. By default, it will be accessible at https://localhost:7049/. You can change the port by modifying the launchSettings.json file located in the Properties directory of your project.
 
 Seeding Data: Data seeding is being handeled using Bogus. Application’s startup logic includes data seeding. It seeds data if the table is empty.
+
+### Default Login Credentials
+
+During the initial database seeding, the following default users are created:
+
+#### Default Librarian Account
+- **Username:** `librarian@lms.com`
+- **Password:** `Password123!`
+
+#### Default Customer Account
+- **Username:** `customer@lms.com`
+- **Password:** `Password123!`
